@@ -1,18 +1,18 @@
 import 'package:bloc/bloc.dart';
-import 'package:cashier/model/Product.dart';
-import 'package:cashier/utils/local/database.dart';
+import 'package:cashier/data/model/Product.dart';
+import 'package:cashier/data/local/database.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'main_states.dart';
+import '../example/example_states.dart';
 
 
-class MainCubit extends Cubit<MainState> {
-  MainCubit() : super(MainInitial());
+class ExampleCubit extends Cubit<ExampleState> {
+  ExampleCubit() : super(ExampleInitial());
   List<Product> products = [];
 
-  static MainCubit get(context) => BlocProvider.of(context);
+  static ExampleCubit get(context) => BlocProvider.of(context);
 
   Future getNotes() async {
-    emit(MainLoading());
+    emit(ExampleLoading());
     SQLHelper.initDb();
     SQLHelper.getNotes().then((value) {
       // notes = [];
@@ -28,12 +28,12 @@ class MainCubit extends Cubit<MainState> {
         )
         );
       }
-      emit(MainLoaded());
+      emit(ExampleLoaded());
     });
   }
 
   Future refreshData()async{
-    emit(MainLoading());
+    emit(ExampleLoading());
     SQLHelper.getNotes().then((value) {
       products = [];
       for (Map<String, dynamic> pro in value) {
@@ -48,9 +48,9 @@ class MainCubit extends Cubit<MainState> {
         )
         );
       }
-      emit(MainChanged());
+      emit(ExampleChanged());
     }).catchError((error){
-      emit(MainError());
+      emit(ExampleError());
     });
   }
 }

@@ -1,4 +1,4 @@
-import 'package:cashier/model/Product.dart';
+import 'package:cashier/data/model/Product.dart';
 
 class Invoice {
   String? price;
