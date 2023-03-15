@@ -20,7 +20,6 @@ class ExampleCubit extends Cubit<ExampleState> {
         products.add(Product(
             id: pro['id'],
             name: pro['title'],
-            price: pro['price'],
             quantity: pro['quantity'],
             boxQuantity: pro['boxQuantity'],
             buyPrice: pro['buyPrice'],
@@ -40,7 +39,6 @@ class ExampleCubit extends Cubit<ExampleState> {
         products.add(Product(
             id: pro['id'],
             name: pro['title'],
-            price: pro['price'],
             quantity: pro['quantity'],
             boxQuantity: pro['boxQuantity'],
             buyPrice: pro['buyPrice'],
