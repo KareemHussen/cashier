@@ -1,7 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:cashier/presentation/screens/bloc_observer.dart';
 import 'package:cashier/presentation/screens/main/viewmodel/main_cubit.dart';
-import 'package:cashier/utils/local/database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -15,7 +14,7 @@ Future<void> main() async {
         BlocProvider(create: (context) => MainCubit()),
       ],
 
-      child: MaterialApp(
+      child: const MaterialApp(
           debugShowCheckedModeBanner: false,
            home: MyApp())
   ));
