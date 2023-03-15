@@ -7,7 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await SQLHelper.initDb();
+  // await SQLHelper.initDb();
   Bloc.observer = MyBlocObserver();
 
   runApp(MultiBlocProvider(
@@ -15,11 +15,10 @@ Future<void> main() async {
         BlocProvider(create: (context) => MainCubit()),
       ],
 
-      child: const MaterialApp(
-        debugShowCheckedModeBanner: false,
-          home: MyApp())
-  )
-  );
+      child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+           home: MyApp())
+  ));
 }
 
 class MyApp extends StatelessWidget {
