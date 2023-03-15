@@ -1,8 +1,9 @@
 import 'package:bloc/bloc.dart';
-import 'package:cashier/presentation/screens/bloc_observer.dart';
-import 'package:cashier/presentation/screens/main/viewmodel/main_cubit.dart';
+import 'package:cashier/utils/bloc_observer/bloc_observer.dart';
+import 'package:cashier/screens/example/example_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -11,13 +12,29 @@ Future<void> main() async {
 
   runApp(MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => MainCubit()),
+        BlocProvider(create: (context) => ExampleCubit()),
       ],
-
-      child: const MaterialApp(
+      child: MaterialApp(
           debugShowCheckedModeBanner: false,
-           home: MyApp())
-  ));
+          home: ScreenUtilInit(
+            designSize: const Size(1920, 1080),
+            minTextAdapt: true,
+            splitScreenMode: true,
+            builder: (context, child) {
+              return MaterialApp(
+                debugShowCheckedModeBanner: false,
+                title: 'First Method',
+                // You can use the library anywhere in the app even in theme
+                theme: ThemeData(
+                  primarySwatch: Colors.blue,
+                  textTheme:
+                      Typography.englishLike2018.apply(fontSizeFactor: 1.sp),
+                ),
+                home: child,
+              );
+            },
+            child: const MyApp(),
+          ))));
 }
 
 class MyApp extends StatelessWidget {
@@ -118,6 +135,10 @@ class _MyHomePageState extends State<MyHomePage> {
               '$_counter',
               style: Theme.of(context).textTheme.headline4,
             ),
+
+            // SizedBox(width: 1920.w, height: 100.h, child: Card(
+            //   color: Colors.black,
+            // ),)
           ],
         ),
       ),
