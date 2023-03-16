@@ -45,7 +45,7 @@ class _ProductFormState extends State<ProductForm> {
           title: Text(flag ? 'إضافة منتج جديد' : 'تعديل المنتج'),
         ),
         body: Padding(
-          padding: EdgeInsets.fromLTRB(400.w, 300.h, 400.w, 200.h),
+          padding: EdgeInsets.fromLTRB(400.w, 300.h, 400.w, 180.h),
           child: Form(
             key: _formKey,
             child: Column(
