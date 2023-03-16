@@ -1,4 +1,5 @@
 import 'package:cashier/screens/example/example.dart';
+import 'package:cashier/screens/storage/storage.dart';
 import 'package:cashier/utils/bloc_observer/bloc_observer.dart';
 import 'package:cashier/screens/example/example_cubit.dart';
 import 'package:flutter/material.dart';
@@ -48,7 +49,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const HomeScreen(),
+      home: Storage(),
     );
   }
 }
