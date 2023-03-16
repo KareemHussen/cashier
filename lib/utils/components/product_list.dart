@@ -1,14 +1,16 @@
+import 'package:cashier/data/local/database.dart';
 import 'package:cashier/data/model/Product.dart';
 import 'package:cashier/utils/components/product_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ProductList extends StatefulWidget {
-  final List<Product> products;
+   List<Product> products;
   final String? title;
   final String? subtitle;
   final bool? admin;
-
+  late String searchQuery;
+  late List<Product> filteredProducts;
   ProductList({required this.products, this.title, this.subtitle, this.admin});
 
   @override
@@ -23,7 +25,9 @@ class _ProductListState extends State<ProductList> {
     'buyPrice',
     'sellPrice',
   ];
-
+  late List<Product> products;
+  late List<Product> filteredProducts;
+  String searchQuery = '';
   final List<String> arabic = [
     'اسم المنتج',
     'رقم المنتج',
@@ -32,12 +36,11 @@ class _ProductListState extends State<ProductList> {
     'سعر البيع',
   ];
 
-  late List<Product> products;
-
   @override
   void initState() {
     super.initState();
     products = widget.products;
+    filteredProducts = products;
   }
 
   @override
@@ -49,6 +52,7 @@ class _ProductListState extends State<ProductList> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
+
             if (widget.title != null)
               Center(
                 child: Text(
@@ -65,6 +69,27 @@ class _ProductListState extends State<ProductList> {
               ),
             SizedBox(height: 32.h),
             // Display the common factors
+// Display the search bar
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.w),
+              child: TextField(
+                decoration: InputDecoration(
+                  hintText: 'Search',
+                ),
+                onChanged: (value) {
+                  setState(() {
+                    searchQuery = value;
+                    filteredProducts = products
+                        .where((product) =>
+                    product.name
+                        .toLowerCase()
+                        .contains(searchQuery.toLowerCase()) ||
+                        product.id.toString().contains(searchQuery.toLowerCase()))
+                        .toList();
+                  });
+                },
+              ),
+            ),
             Row(
               children: [
                 for (String factor in commonFactors)
@@ -96,9 +121,9 @@ class _ProductListState extends State<ProductList> {
                   child: ListView.builder(
                     shrinkWrap: true,
                     physics: AlwaysScrollableScrollPhysics(),
-                    itemCount: products.length,
+                    itemCount: filteredProducts.length,
                     itemBuilder: (context, index) {
-                      Product product = products[index];
+                      Product product = filteredProducts[index];
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -108,7 +133,7 @@ class _ProductListState extends State<ProductList> {
                                 Expanded(
                                   child: Text(
                                     product.toMap()[factor].toString(),
-                                    style: TextStyle(fontSize: 28.sp),
+                                    style: TextStyle(fontSize: 28.sp , fontWeight: FontWeight.bold),
                                   ),
                                 ),
                               widget.admin!
@@ -177,6 +202,7 @@ class _ProductListState extends State<ProductList> {
             TextButton(
               child: Text('إلغاء'),
               onPressed: () {
+                SQLHelper.deleteProduct(productId);
                 Navigator.pop(context);
               },
             ),
@@ -184,6 +210,7 @@ class _ProductListState extends State<ProductList> {
               child: Text('حذف'),
               onPressed: () {
                 setState(() {
+                  SQLHelper.deleteProduct(productId);
                   products.removeWhere((product) => product.id == productId);
                 });
                 Navigator.of(context).pop();
@@ -207,6 +234,7 @@ class _ProductListState extends State<ProductList> {
           product: selectedProduct,
           onSave: (product) {
             setState(() {
+              SQLHelper.updateProduct(productId, product.name, product.quantity, product.buyPrice, product.sellPrice);
               products[products.indexWhere((p) => p.id == product.id)] =
                   product;
             });
@@ -231,6 +259,7 @@ class _ProductListState extends State<ProductList> {
           buttonText: "add",
           onSave: (product) {
             setState(() {
+              SQLHelper.addProduct(product.name, product.quantity, product.buyPrice, product.sellPrice);
               products.add(product);
             });
             // Navigator.of(context).pop();
