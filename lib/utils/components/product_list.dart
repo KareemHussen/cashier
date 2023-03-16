@@ -1,3 +1,4 @@
+import 'package:cashier/data/local/database.dart';
 import 'package:cashier/data/model/Product.dart';
 import 'package:cashier/utils/components/product_form.dart';
 import 'package:flutter/material.dart';
@@ -201,6 +202,7 @@ class _ProductListState extends State<ProductList> {
             TextButton(
               child: Text('إلغاء'),
               onPressed: () {
+                SQLHelper.deleteProduct(productId);
                 Navigator.pop(context);
               },
             ),
@@ -208,6 +210,7 @@ class _ProductListState extends State<ProductList> {
               child: Text('حذف'),
               onPressed: () {
                 setState(() {
+                  SQLHelper.deleteProduct(productId);
                   products.removeWhere((product) => product.id == productId);
                 });
                 Navigator.of(context).pop();
@@ -231,6 +234,7 @@ class _ProductListState extends State<ProductList> {
           product: selectedProduct,
           onSave: (product) {
             setState(() {
+              SQLHelper.updateProduct(productId, product.name, product.quantity, product.buyPrice, product.sellPrice);
               products[products.indexWhere((p) => p.id == product.id)] =
                   product;
             });
@@ -255,6 +259,7 @@ class _ProductListState extends State<ProductList> {
           buttonText: "add",
           onSave: (product) {
             setState(() {
+              SQLHelper.addProduct(product.name, product.quantity, product.buyPrice, product.sellPrice);
               products.add(product);
             });
             // Navigator.of(context).pop();
