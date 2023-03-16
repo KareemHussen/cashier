@@ -1,7 +1,7 @@
 import 'package:cashier/data/model/Product.dart';
 
 class Invoice {
-  String? price;
+  int? price;
   int? id;
   List<Product> products;
 
