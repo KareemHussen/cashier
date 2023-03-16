@@ -1,3 +1,4 @@
+import 'package:cashier/data/local/database.dart';
 import 'package:cashier/screens/example/example.dart';
 import 'package:cashier/screens/storage/storage.dart';
 import 'package:cashier/utils/bloc_observer/bloc_observer.dart';
@@ -8,7 +9,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // await SQLHelper.initDb();
+  await SQLHelper.initDb();
   Bloc.observer = MyBlocObserver();
 
   runApp(MultiBlocProvider(

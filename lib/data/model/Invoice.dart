@@ -7,7 +7,7 @@ class Invoice {
 
   Invoice(
       {required this.id,
-      required this.products,
-      required this.price,
+        required this.products,
+        required this.price,
       });
 }
