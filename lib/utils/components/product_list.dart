@@ -99,7 +99,7 @@ class _ProductListState extends State<ProductList> {
                           fontSize: 28.sp, fontWeight: FontWeight.bold),
                     ),
                   ),
-                SizedBox(width: 130)
+                SizedBox(width: 230.w)
               ],
             ),
             SizedBox(height: 16.h),

@@ -45,10 +45,10 @@ class SQLHelper {
     CREATE TABLE invoices (
       id INTEGER PRIMARY KEY,
       price INTEGER NOT NULL,
-      products TEXT NOT NULL
+      products TEXT NOT NULL,
+      time INTEGER NOT NULL,
       )
   ''');
-
     debugPrint("table Created");
   }
 
@@ -116,6 +116,7 @@ class SQLHelper {
     final data = {
       'price': price,
       'products': json,
+      'time': DateTime.now().millisecond
     }; //create data in map
 
     final id = await db.insert('invoices', data); //insert
@@ -128,10 +129,16 @@ class SQLHelper {
     return db.query('invoices', orderBy: "id");
   }
 
-  //get plant by id
+  //get invoice by id
   static Future<List<Map<String, dynamic>>> getInvoice(int id) async {
     final db = await SQLHelper.initDb();
     return db.query('invoices', where: "id = ?", whereArgs: [id]);
+  }
+
+  //get invoice by time
+  static Future<List<Map<String, dynamic>>> getInvoiceByTime(DateTime id) async {
+    final db = await SQLHelper.initDb();
+    return db.query('invoices', where: "time >= ?", whereArgs: [id.millisecond]);
   }
 
   //update
