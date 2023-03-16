@@ -41,7 +41,8 @@ dependencies:
   bloc: ^8.1.1
   sqflite: ^2.2.6
   flutter_screenutil: ^5.0.0
-  syncfusion_flutter_datagrid: ^20.4.54
+  path_provider: ^2.0.13
+  sqflite_common_ffi: ^2.2.2
 
 dev_dependencies:
   flutter_test:

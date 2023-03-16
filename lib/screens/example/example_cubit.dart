@@ -11,44 +11,42 @@ class ExampleCubit extends Cubit<ExampleState> {
 
   static ExampleCubit get(context) => BlocProvider.of(context);
 
-  Future getNotes() async {
-    emit(ExampleLoading());
-    SQLHelper.initDb();
-    SQLHelper.getNotes().then((value) {
-      // notes = [];
-      for (Map<String, dynamic> pro in value) {
-        products.add(Product(
-            id: pro['id'],
-            name: pro['title'],
-            quantity: pro['quantity'],
-            boxQuantity: pro['boxQuantity'],
-            buyPrice: pro['buyPrice'],
-            sellPrice: pro['sellPrice']
-        )
-        );
-      }
-      emit(ExampleLoaded());
-    });
-  }
-
-  Future refreshData()async{
-    emit(ExampleLoading());
-    SQLHelper.getNotes().then((value) {
-      products = [];
-      for (Map<String, dynamic> pro in value) {
-        products.add(Product(
-            id: pro['id'],
-            name: pro['title'],
-            quantity: pro['quantity'],
-            boxQuantity: pro['boxQuantity'],
-            buyPrice: pro['buyPrice'],
-            sellPrice: pro['sellPrice']
-        )
-        );
-      }
-      emit(ExampleChanged());
-    }).catchError((error){
-      emit(ExampleError());
-    });
-  }
+  // Future getNotes() async {
+  //   emit(ExampleLoading());
+  //   SQLHelper.initDb();
+  //   SQLHelper.getproducts().then((value) {
+  //     // notes = [];
+  //     for (Map<String, dynamic> pro in value) {
+  //       products.add(Product(
+  //           id: pro['id'],
+  //           name: pro['title'],
+  //           quantity: pro['quantity'],
+  //           buyPrice: pro['buyPrice'],
+  //           sellPrice: pro['sellPrice']
+  //       )
+  //       );
+  //     }
+  //     emit(ExampleLoaded());
+  //   });
+  // }
+  //
+  // Future refreshData()async{
+  //   emit(ExampleLoading());
+  //   SQLHelper.getproducts().then((value) {
+  //     products = [];
+  //     for (Map<String, dynamic> pro in value) {
+  //       products.add(Product(
+  //           id: pro['id'],
+  //           name: pro['title'],
+  //           quantity: pro['quantity'],
+  //           buyPrice: pro['buyPrice'],
+  //           sellPrice: pro['sellPrice']
+  //       )
+  //       );
+  //     }
+  //     emit(ExampleChanged());
+  //   }).catchError((error){
+  //     emit(ExampleError());
+  //   });
+  // }
 }
