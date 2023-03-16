@@ -1,7 +1,6 @@
 class Product {
-  String? name;
+  String name;
   int quantity;
-  int boxQuantity;
   int buyPrice;
   int sellPrice;
   int id;
@@ -10,7 +9,6 @@ class Product {
       {required this.id,
       required this.name,
       required this.quantity,
-      required this.boxQuantity,
       required this.buyPrice,
       required this.sellPrice});
 }

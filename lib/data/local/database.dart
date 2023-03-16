@@ -3,23 +3,27 @@ import 'package:sqflite/sqflite.dart' as sql;
 import 'package:sqflite/sqflite.dart';
 
 class SQLHelper {
-
   static Future<Database> initDb() async {
     return sql.openDatabase(
-      'odc.db', //database name
+      'products.db', //database name
       version: 1, //version number
       onCreate: (Database database, int version) async {
-        await createTablenotes(database);
+        await createTableproducts(database);
       },
     );
   }
-
-  static Future<void> createTablenotes(Database database) async {
-    await database.execute("""CREATE TABLE notes(
+//String name;
+//   int quantity;
+//   int buyPrice;
+//   int sellPrice;
+//   int id;
+  static Future<void> createTableproducts(Database database) async {
+    await database.execute("""CREATE TABLE products(
         id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-        title TEXT,
-        date TEXT,
-        description TEXT
+        name TEXT,
+        buyPrice INTEGER,
+        sellPrice INTEGER,
+        quantity INTEGER,        
       )
       """);
 
@@ -27,45 +31,55 @@ class SQLHelper {
   }
 
   //add
-  static Future<int> addNote(String title, String descrption , String date) async {
+  static Future<int> addProduct(
+      String name, int quantity,int buyPrice , int sellPrice) async {
     final db = await SQLHelper.initDb(); //open database
-    final data = {'date' : date,'title': title, 'description': descrption}; //create data in map
-    final id = await db.insert('notes', data);  //insert
+    final data = {
+      'name': name,
+      'quantity': quantity,
+      'buyPrice': buyPrice,
+      'sellPrice': sellPrice,
+
+    }; //create data in map
+    final id = await db.insert('products', data); //insert
     debugPrint("Data Added");
     return id;
   }
 
-//read all notes
-  static Future<List<Map<String, dynamic>>> getNotes() async {
+//read all products
+  static Future<List<Map<String, dynamic>>> getproducts() async {
     final db = await SQLHelper.initDb();
-    return db.query('notes', orderBy: "id");
+    return db.query('products', orderBy: "id");
   }
 
   //get plant by id
-  static Future<List<Map<String, dynamic>>> getNote(int id) async {
+  static Future<List<Map<String, dynamic>>> getProduct(int id) async {
     final db = await SQLHelper.initDb();
-    return db.query('notes', where: "id = ?", whereArgs: [id]);
+    return db.query('products', where: "id = ?", whereArgs: [id]);
   }
 
   //update
-  static Future<int> updateNote(
-      int id, String title, String? descrption , String? date) async {
+  static Future<int> updateProduct(
+      int id,String name, int quantity,int buyPrice , int sellPrice) async {
     final db = await SQLHelper.initDb();
     final data = {
-      'title': title,
-      'description': descrption,
-      'date':date
-    };
+      'name': name,
+      'quantity': quantity,
+      'buyPrice': buyPrice,
+      'sellPrice': sellPrice,
+
+    }; //create data
 
     final result =
-    await db.update('notes', data, where: "id = ?", whereArgs: [id]);
+        await db.update('products', data, where: "id = ?", whereArgs: [id]);
     return result;
   }
+
   // Delete
-  static Future<void> deleteNote(int id) async {
+  static Future<void> deleteProduct(int id) async {
     final db = await SQLHelper.initDb();
     try {
-      await db.delete("notes", where: "id = ?", whereArgs: [id]);
+      await db.delete("products", where: "id = ?", whereArgs: [id]);
     } catch (err) {
       print("Something went wrong when : $err");
     }
