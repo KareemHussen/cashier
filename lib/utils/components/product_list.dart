@@ -68,13 +68,13 @@ class _ProductListState extends State<ProductList> {
                 ),
               ),
             SizedBox(height: 32.h),
-            // Display the common factors
-// Display the search bar
+
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.w),
               child: TextField(
                 decoration: InputDecoration(
-                  hintText: 'Search',
+                  contentPadding: EdgeInsets.fromLTRB(0, 0, 900.w, 0),
+                  hintText: 'البحث عن منتج',
                 ),
                 onChanged: (value) {
                   setState(() {
@@ -95,13 +95,23 @@ class _ProductListState extends State<ProductList> {
             Row(
               children: [
                 for (String factor in commonFactors)
-                  Expanded(
-                    child: Text(
-                      arabic[commonFactors.indexOf(factor)],
-                      style: TextStyle(
-                          fontSize: 28.sp, fontWeight: FontWeight.bold),
-                    ),
-                  ),
+                  (factor == 'name')
+                      ? Expanded(
+                          flex: 2,
+                          child: Text(
+                            arabic[commonFactors.indexOf(factor)],
+                            style: TextStyle(
+                                fontSize: 28.sp, fontWeight: FontWeight.bold),
+                          ),
+                        )
+                      : Expanded(
+                          flex: 1,
+                          child: Text(
+                            arabic[commonFactors.indexOf(factor)],
+                            style: TextStyle(
+                                fontSize: 28.sp, fontWeight: FontWeight.bold),
+                          ),
+                        ),
                 SizedBox(width: 130)
               ],
             ),
@@ -132,14 +142,27 @@ class _ProductListState extends State<ProductList> {
                           Row(
                             children: [
                               for (String factor in commonFactors)
-                                Expanded(
-                                  child: Text(
-                                    product.toMap()[factor].toString(),
-                                    style: TextStyle(
-                                        fontSize: 28.sp,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ),
+                                (factor == 'name')
+                                    ? Expanded(
+                                        flex: 2,
+                                        child: Text(
+                                          maxLines: 1,
+                                          product.toMap()[factor].toString(),
+                                          style: TextStyle(
+                                              fontSize: 28.sp,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      )
+                                    : Expanded(
+                                        flex: 1,
+                                        child: Text(
+                                          maxLines: 1,
+                                          product.toMap()[factor].toString(),
+                                          style: TextStyle(
+                                              fontSize: 28.sp,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
                               widget.admin!
                                   ? Row(
                                       mainAxisAlignment: MainAxisAlignment.end,
@@ -247,6 +270,7 @@ class _ProductListState extends State<ProductList> {
           },
           onDelete: (product) {
             setState(() {
+              SQLHelper.deleteProduct(productId);
               products.removeWhere((p) => p.id == product.id);
             });
             Navigator.of(context).pop();
