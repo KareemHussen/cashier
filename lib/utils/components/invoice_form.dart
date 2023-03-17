@@ -4,6 +4,10 @@ import 'package:cashier/utils/components/invoice_item.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:printing/printing.dart';
+
 
 import '../../data/model/Invoice.dart';
 
@@ -69,6 +73,35 @@ class _InvoiceFormState extends State<InvoiceForm> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
+                ElevatedButton(
+                    onPressed: () async {
+                      final ttf = await fontFromAssetBundle('assets/font.ttf');
+                      final doc = pw.Document();
+                      doc.addPage(pw.Page(
+                          pageFormat: PdfPageFormat.a4,
+                          build: (pw.Context context) {
+                            return pw.Column(children: [
+                              pw.Center(child: pw.Text( ' التاريخ و الوقت '
+                                  , style: pw.TextStyle(font: ttf, fontSize: 30))),
+                              pw.Column(
+                                  children: List.generate(
+                                      widget.cartItems?.length ?? 0,
+                                      (index) => printerItem(
+                                          widget.cartItems?[index] ??
+                                              Product(
+                                                  id: -1,
+                                                  name: 'error',
+                                                  quantity: -1,
+                                                  buyPrice: -1,
+                                                  sellPrice: -1),
+                                          4,
+                                          index , ttf))),
+                            ]); // Center
+                          })); // Page
+                      await Printing.layoutPdf(
+                          onLayout: (PdfPageFormat format) async => doc.save());
+                    },
+                    child: const Text('حفظ و طباعة الفاتورة')),
                 DropdownSearch<Product>.multiSelection(
                   items: widget.products,
                   // popupProps: const PopupProps.menu(
@@ -98,7 +131,8 @@ class _InvoiceFormState extends State<InvoiceForm> {
                     return Row(
                       children: [
                         InvoiceItem(p: widget.cartItems![index]),
-                        TextButton(onPressed: () => _removeItem(index),
+                        TextButton(
+                            onPressed: () => _removeItem(index),
                             child: const Text('حذف'))
                       ],
                     );
@@ -112,9 +146,17 @@ class _InvoiceFormState extends State<InvoiceForm> {
     );
   }
 
-
   void _removeItem(int i) {
-    ;
     setState(() => widget.cartItems?.removeAt(i));
+  }
+
+  pw.Row printerItem(Product p, int quantity, int index , pw.Font ttf) {
+    return pw.Row(
+      children: [
+        pw.Text((index + 1).toString()),
+        pw.Text('${p.name} أسم المنتج ' , style: pw.TextStyle(font: ttf, fontSize: 20)) ,
+        pw.Text('${p.sellPrice} سعر المنتج ', style: pw.TextStyle(font: ttf, fontSize: 20)),
+      ],
+    );
   }
 }
