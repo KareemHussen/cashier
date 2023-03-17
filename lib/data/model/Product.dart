@@ -30,4 +30,6 @@ class Product {
     'buyPrice': buyPrice,
     'sellPrice': sellPrice,
   };
+
+
 }

@@ -174,10 +174,23 @@ class _ProductFormState extends State<ProductForm> {
                         child: Text('حذف'),
                       ),
                     SizedBox(width: 16.w),
-                    ElevatedButton(
+                    (flag)?ElevatedButton(
                       onPressed: () async{
                         if (_formKey.currentState!.validate()) {
                          widget.product!.id = await SQLHelper.addProduct(
+                              widget.product!.name, widget.product!.quantity,
+                              widget.product!.buyPrice,
+                              widget.product!.sellPrice);
+                          _formKey.currentState!.save();
+                          widget.onSave(widget.product!);
+                          Navigator.pop(context);
+                        }
+                      },
+                      child: Text('حفظ'),
+                    ):ElevatedButton(
+                      onPressed: () async{
+                        if (_formKey.currentState!.validate()) {
+                          SQLHelper.updateProduct(widget.product!.id!,
                               widget.product!.name, widget.product!.quantity,
                               widget.product!.buyPrice,
                               widget.product!.sellPrice);
