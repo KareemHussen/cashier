@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:cashier/data/model/Product.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
@@ -10,7 +11,7 @@ class SQLHelper {
   static Future<Database> initDb() async {
     sqfliteFfiInit();
     final directory = await databaseFactoryFfi.getDatabasesPath();
-    final path = join(directory, 'aa.db');
+    final path = join(directory, 'cashier.db');
     DatabaseFactory databaseFactory = databaseFactoryFfi;
     if (kDebugMode) {
       print(path + " ggggggggggggggggggggg");
@@ -18,7 +19,7 @@ class SQLHelper {
     return await databaseFactory.openDatabase(
       path,
       options: OpenDatabaseOptions(
-          version: 2,
+          version: 1,
           onCreate: (Database database, int version) async {
             await createTableproducts(database);
             await createTableinvoices(database);
@@ -34,7 +35,7 @@ class SQLHelper {
       quantity INTEGER NOT NULL,
       buyPrice INTEGER NOT NULL,
       sellPrice INTEGER NOT NULL
-      )
+      );
   ''');
     debugPrint("table Created");
   }
@@ -46,7 +47,8 @@ class SQLHelper {
       price INTEGER NOT NULL,
       products TEXT NOT NULL,
       time INTEGER NOT NULL,
-      )
+      gain INTEGER NOT NULL
+      );
   ''');
     debugPrint("table Created");
   }
@@ -112,14 +114,14 @@ class SQLHelper {
   //////////////////////////////////////////////////////////////////////////////
 
 //add
-  static Future<int> addInvoice(int price, List<Product> products) async {
+  static Future<int> addInvoice(int price, List<Product> products , int gain) async {
     final db = await SQLHelper.initDb(); //open database
     final json = jsonEncode(products);
-
     final data = {
       'price': price,
       'products': json,
-      'time': DateTime.now().millisecond
+      'time': DateTime.now().millisecondsSinceEpoch,
+      'gain' : gain
     }; //create data in map
 
     final id = await db.insert('invoices', data); //insert
@@ -136,6 +138,12 @@ class SQLHelper {
   static Future<List<Map<String, dynamic>>> getInvoice(int id) async {
     final db = await SQLHelper.initDb();
     return db.query('invoices', where: "id = ?", whereArgs: [id]);
+  }
+
+  static Future<List<Map<String, dynamic>>> getInvoicesByTime(int startTimestamp, int endTimestamp) async {
+    final db = await SQLHelper.initDb();
+    List<Map<String, dynamic>> list = await db.rawQuery('SELECT * FROM invoices WHERE time BETWEEN ? AND ?', [startTimestamp, endTimestamp]);
+    return list;
   }
 
   //get invoice by time

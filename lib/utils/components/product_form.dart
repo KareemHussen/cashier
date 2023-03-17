@@ -8,12 +8,14 @@ class ProductForm extends StatefulWidget {
   Product? product;
   final Function(Product) onSave;
   final Function(Product) onDelete;
+  final Function(Product) onEdit;
 
   ProductForm({
     required this.buttonText,
     required this.product,
     required this.onSave,
     required this.onDelete,
+    required this.onEdit
   });
 
   @override
@@ -27,13 +29,6 @@ class _ProductFormState extends State<ProductForm> {
   void initState() {
     super.initState();
 
-    // Set the initial values for the fields based on the product
-    widget.product ??
-        Product(id: 0,
-            name: '',
-            quantity: 0,
-            buyPrice: 0,
-            sellPrice: 0);
   }
 
   @override
@@ -73,7 +68,9 @@ class _ProductFormState extends State<ProductForm> {
                   },
                   onSaved: (value) {
                     widget.product!.name = value!;
-                  },
+                  },                  onChanged: (value) {
+                  widget.product!.name = value!;
+                },
                 ),
                 SizedBox(height: 16.h),
                 TextFormField(
@@ -93,7 +90,9 @@ class _ProductFormState extends State<ProductForm> {
                   },
                   onSaved: (value) {
                     widget.product!.quantity = int.parse(value!);
-                  },
+                  },                  onChanged: (value) {
+                  widget.product!.quantity = int.parse(value!);
+                },
                 ),
                 SizedBox(height: 16.h),
                 TextFormField(
@@ -113,7 +112,9 @@ class _ProductFormState extends State<ProductForm> {
                   },
                   onSaved: (value) {
                     widget.product!.buyPrice = int.parse(value!);
-                  },
+                  },                  onChanged: (value) {
+                  widget.product!.buyPrice = int.parse(value);
+                },
                 ),
                 SizedBox(height: 16.h),
                 TextFormField(
@@ -134,47 +135,17 @@ class _ProductFormState extends State<ProductForm> {
                   onSaved: (value) {
                     widget.product!.sellPrice = int.parse(value!);
                   },
+                  onChanged: (v){
+                    widget.product!.sellPrice = int.parse(v);
+                  },
                 ),
                 SizedBox(height: 16.h),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    if (!flag)
-                      ElevatedButton(
-                        onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) =>
-                                AlertDialog(
-                                  title: Text('حذف المنتج'),
-                                  content: Text(
-                                      'هل أنت متأكد من رغبتك بحذف هذا المنتج ؟'),
-                                  actions: [
-                                    TextButton(
-                                        child: Text('إلغاء'),
-                                        onPressed: () {
-                                          Navigator.pop(context);
-                                          Navigator.pop(context);
-                                        }
-                                    ),
-                                    TextButton(
-                                      child: Text('حذف'),
-                                      onPressed: () {
-                                        widget.onDelete(widget.product!);
-                                        Navigator.pop(context);
-                                      },
-                                    ),
-                                  ],
-                                ),
-                          );
-                        },
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.red,
-                        ),
-                        child: Text('حذف'),
-                      ),
+
                     SizedBox(width: 16.w),
-                    ElevatedButton(
+                    (flag)?ElevatedButton(
                       onPressed: () async{
                         if (_formKey.currentState!.validate()) {
                          widget.product!.id = await SQLHelper.addProduct(
@@ -183,6 +154,19 @@ class _ProductFormState extends State<ProductForm> {
                               widget.product!.sellPrice);
                           _formKey.currentState!.save();
                           widget.onSave(widget.product!);
+                          Navigator.pop(context);
+                        }
+                      },
+                      child: Text('حفظ'),
+                    ):ElevatedButton(
+                      onPressed: () async{
+                        if (_formKey.currentState!.validate()) {
+                          SQLHelper.updateProduct(widget.product!.id!,
+                              widget.product!.name, widget.product!.quantity,
+                              widget.product!.buyPrice,
+                              widget.product!.sellPrice);
+                          _formKey.currentState!.save();
+                          widget.onEdit(widget.product!);
                           Navigator.pop(context);
                         }
                       },

@@ -73,8 +73,9 @@ class _ProductListState extends State<ProductList> {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.w),
               child: TextField(
-                decoration: const InputDecoration(
-                  hintText: 'Search',
+                decoration: InputDecoration(
+                  contentPadding: EdgeInsets.fromLTRB(0, 0, 900.w, 0),
+                  hintText: 'البحث عن منتج',
                 ),
                 onChanged: (value) {
                   setState(() {
@@ -95,7 +96,16 @@ class _ProductListState extends State<ProductList> {
             Row(
               children: [
                 for (String factor in commonFactors)
+                  (factor == 'name')?
                   Expanded(
+                    flex: 2,
+                    child: Text(
+                      arabic[commonFactors.indexOf(factor)],
+                      style: TextStyle(
+                          fontSize: 28.sp, fontWeight: FontWeight.bold),
+                    ),
+                  ):Expanded(
+                    flex: 1,
                     child: Text(
                       arabic[commonFactors.indexOf(factor)],
                       style: TextStyle(
@@ -132,9 +142,21 @@ class _ProductListState extends State<ProductList> {
                           Row(
                             children: [
                               for (String factor in commonFactors)
+                                (factor == 'name')?
                                 Expanded(
+                                  flex: 2,
                                   child: Text(
-                                    product.toMap()[factor].toString(),
+                                    maxLines: 1,
+                                    product.toJson()[factor].toString(),
+                                    style: TextStyle(
+                                        fontSize: 28.sp,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ):Expanded(
+                                  flex: 1,
+                                  child: Text(
+                                    maxLines: 1,
+                                    product.toJson()[factor].toString(),
                                     style: TextStyle(
                                         fontSize: 28.sp,
                                         fontWeight: FontWeight.bold),
@@ -165,14 +187,9 @@ class _ProductListState extends State<ProductList> {
                                         SizedBox(width: 20.w)
                                       ],
                                     )
-                                  : ElevatedButton(
-                                      child: Text('اضافه'),
-                                      onPressed: () {},
-                                      style: ButtonStyle(
-                                        backgroundColor:
-                                            MaterialStateProperty.all<Color>(
-                                                Colors.blue),
-                                      ),
+                                  : SizedBox(
+                                      width: 0,
+                                      height: 0,
                                     ),
                             ],
                           ),
@@ -241,17 +258,17 @@ class _ProductListState extends State<ProductList> {
         builder: (context) => ProductForm(
           buttonText: "edit",
           product: selectedProduct,
-          onSave: (product) {
+          onEdit: (product) {
             setState(() {
-              SQLHelper.updateProduct(productId, product.name, product.quantity,
-                  product.buyPrice, product.sellPrice);
+
               products[products.indexWhere((p) => p.id == product.id)] =
                   product;
             });
-            // Navigator.of(context).pop();
           },
+          onSave: (product){},
           onDelete: (product) {
             setState(() {
+              SQLHelper.deleteProduct(productId);
               products.removeWhere((p) => p.id == product.id);
             });
             Navigator.of(context).pop();
@@ -268,13 +285,11 @@ class _ProductListState extends State<ProductList> {
         builder: (context) => ProductForm(
           buttonText: "add",
           onSave: (product) {
+            products.add(product);
             setState(() {
-              SQLHelper.addProduct(product.name, product.quantity,
-                  product.buyPrice, product.sellPrice);
-              products.add(product);
             });
-            // Navigator.of(context).pop();
           },
+onEdit: (Product){},
           product: null,
           onDelete: (Product) {},
         ),
