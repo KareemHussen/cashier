@@ -1,6 +1,8 @@
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:cashier/data/local/database.dart';
+import 'package:cashier/data/model/Invoice.dart';
 import 'package:cashier/data/model/Product.dart';
 import 'package:cashier/screens/buy/Buy.dart';
 import 'package:cashier/screens/storage/storage.dart';
@@ -59,7 +61,74 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: const Text('الشراء'),
                   ),
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      List<Product> _items = [
+                        Product(
+                            name: 'كرتونه بيض احمر',
+                            quantity: 1,
+                            buyPrice: 12,
+                            sellPrice: 14,
+                            id: 1),
+                        Product(
+                            name: 'طماطم حمرا', quantity: 2, buyPrice: 12, sellPrice: 14, id: 1),
+                        Product(
+                            name: 'فلفل احمر', quantity: 3, buyPrice: 12, sellPrice: 14, id: 1),
+                        Product(
+                            name: 'كرتونه بيض احمر',
+                            quantity: 1,
+                            buyPrice: 12,
+                            sellPrice: 14,
+                            id: 1),
+                        Product(
+                            name: 'طماطم حمرا', quantity: 2, buyPrice: 12, sellPrice: 14, id: 1),
+                        Product(
+                            name: 'فلفل احمر', quantity: 3, buyPrice: 12, sellPrice: 14, id: 1),
+                        Product(
+                            name: 'كرتونه بيض احمر',
+                            quantity: 1,
+                            buyPrice: 12,
+                            sellPrice: 14,
+                            id: 1),
+                        Product(
+                            name: 'طماطم حمرا', quantity: 2, buyPrice: 12, sellPrice: 14, id: 1),
+                        Product(
+                            name: 'فلفل احمر', quantity: 3, buyPrice: 12, sellPrice: 14, id: 1),
+                        Product(
+                            name: 'كرتونه بيض احمر',
+                            quantity: 1,
+                            buyPrice: 12,
+                            sellPrice: 14,
+                            id: 1),
+                        Product(
+                            name: 'طماطم حمرا', quantity: 2, buyPrice: 12, sellPrice: 14, id: 1),
+                        Product(
+                            name: 'فلفل احمر', quantity: 3, buyPrice: 12, sellPrice: 14, id: 1),
+                      ];
+                      List<Invoice> invoices = [];
+
+
+                      SQLHelper.addInvoice(90, _items , calculateGain(_items)).then((value) => {
+                          print(value)
+                      });
+                      SQLHelper.getInvoices().then((value) {
+                        for (Map<String, dynamic> invoice in value) {
+
+                          List<dynamic> productList = jsonDecode(invoice['products']);
+                          List<Product> products = productList.map((item) => Product.fromJson(item)).toList();
+
+
+                          invoices.add(Invoice(
+                              id: invoice['id'],
+                              price: invoice['price'],
+                              products: products,
+                              time: invoice['time'],
+                              gain: invoice['gain']
+                          )
+                          );
+                        }
+                        print(invoices[4].gain);
+                      });
+                    },
                     style: ElevatedButton.styleFrom(
                         primary: Colors.purple,
                         padding: const EdgeInsets.symmetric(
@@ -69,7 +138,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: const Text('الجرد'),
                   ),
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Storage()),
+                      );
+                    },
                     style: ElevatedButton.styleFrom(
                         primary: Colors.purple,
                         padding: const EdgeInsets.symmetric(
@@ -102,5 +176,15 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
+  }
+
+  int calculateGain(List<Product> products) {
+    int gain = 0;
+
+    for (var element in products) {
+      gain = gain + element.buyPrice - element.sellPrice;
+    }
+
+    return gain;
   }
 }

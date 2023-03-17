@@ -134,7 +134,7 @@ class _ProductListState extends State<ProductList> {
                               for (String factor in commonFactors)
                                 Expanded(
                                   child: Text(
-                                    product.toMap()[factor].toString(),
+                                    product.toJson()[factor].toString(),
                                     style: TextStyle(
                                         fontSize: 28.sp,
                                         fontWeight: FontWeight.bold),

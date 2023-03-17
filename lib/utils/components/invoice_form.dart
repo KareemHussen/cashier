@@ -39,14 +39,14 @@ class _InvoiceFormState extends State<InvoiceForm> {
     super.initState();
     // Set the initial values for the fields based on the product
     widget.cartItems ?? <Product>[];
-    widget.invoice ?? Invoice(products: <Product>[], price: 0);
+    widget.invoice ?? Invoice(products: <Product>[], price: 0 , time: null, gain: null);
   }
 
   @override
   Widget build(BuildContext context) {
     bool flag = widget.invoice == null;
     if (flag) {
-      widget.invoice = Invoice(products: <Product>[], price: 0);
+      widget.invoice = Invoice(products: <Product>[], price: 0, time: null, gain: null);
     }
     SQLHelper.getproducts().then((value) {
       for (Map<String, dynamic> pro in value) {
