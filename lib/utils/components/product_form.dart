@@ -61,7 +61,7 @@ class _ProductFormState extends State<ProductForm> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 TextFormField(
-                  initialValue: widget.product!.name ?? '',
+                  initialValue: widget.product!.name,
                   decoration: const InputDecoration(
                     labelText: 'اسم المنتج',
                   ),
@@ -77,8 +77,8 @@ class _ProductFormState extends State<ProductForm> {
                 ),
                 SizedBox(height: 16.h),
                 TextFormField(
-                  initialValue: widget.product!.quantity?.toString(),
-                  decoration: InputDecoration(
+                  initialValue: widget.product!.quantity.toString(),
+                  decoration: const InputDecoration(
                     labelText: 'الكمية',
                   ),
                   keyboardType: TextInputType.number,
@@ -97,8 +97,8 @@ class _ProductFormState extends State<ProductForm> {
                 ),
                 SizedBox(height: 16.h),
                 TextFormField(
-                  initialValue: widget.product!.buyPrice?.toString(),
-                  decoration: InputDecoration(
+                  initialValue: widget.product!.buyPrice.toString(),
+                  decoration: const InputDecoration(
                     labelText: 'سعر الشراء',
                   ),
                   keyboardType: TextInputType.number,
@@ -117,8 +117,8 @@ class _ProductFormState extends State<ProductForm> {
                 ),
                 SizedBox(height: 16.h),
                 TextFormField(
-                  initialValue: widget.product!.sellPrice?.toString(),
-                  decoration: InputDecoration(
+                  initialValue: widget.product!.sellPrice.toString(),
+                  decoration: const InputDecoration(
                     labelText: 'سعر البيع',
                   ),
                   keyboardType: TextInputType.number,

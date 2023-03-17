@@ -1,14 +1,19 @@
+import 'dart:collection';
+
 import 'package:cashier/data/model/Product.dart';
 
 class Invoice {
   int? price;
   int? id;
-  List<Product> products;
+  HashMap<Product, int> products;
+  int? timestamp;
 
 
   Invoice(
-      {this.id,
-      required this.products,
-      required this.price,
+      {
+        this.id,
+        this.timestamp,
+        required this.products,
+        required this.price,
       });
 }
