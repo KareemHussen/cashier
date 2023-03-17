@@ -48,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Buy()),
+                        MaterialPageRoute(builder: (context) => const Buy()),
                       );
                     },
                     style: ElevatedButton.styleFrom(
