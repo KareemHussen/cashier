@@ -15,25 +15,20 @@ class Shorfalls extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Center(child: Text(title!)),
-      ),
-
-      body: BlocConsumer<StorageCubit, StorageState>(
-        listener: (context, state) {
-        },
-        builder: (context, state) {
-          products = StorageCubit.get(context).products.where((product) => product.quantity < 15).toList();
-          return ProductList(
-              products: products,
-              title: null,
-              subtitle: null,
-              admin: false
-          );
-        },
-      ),
+    products = StorageCubit.get(context).products.where((product) => product.quantity < 15).toList();
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Center(child: Text(title!)),
+        ),
+        body: ProductList(
+                products: products,
+                title: null,
+                subtitle: null,
+                admin: false
+            )
+        ),
     );
   }
 
