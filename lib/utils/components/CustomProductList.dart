@@ -4,7 +4,7 @@ import 'package:cashier/utils/components/product_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class ProductList extends StatefulWidget {
+class CustomProductList extends StatefulWidget {
   List<Product> products;
   final String? title;
   final String? subtitle;
@@ -12,13 +12,13 @@ class ProductList extends StatefulWidget {
   late String searchQuery;
   late List<Product> filteredProducts;
 
-  ProductList({required this.products, this.title, this.subtitle, this.admin});
+  CustomProductList({required this.products, this.title, this.subtitle, this.admin});
 
   @override
   _ProductListState createState() => _ProductListState();
 }
 
-class _ProductListState extends State<ProductList> {
+class _ProductListState extends State<CustomProductList> {
   final List<String> commonFactors = [
     'name',
     'id',
@@ -81,12 +81,12 @@ class _ProductListState extends State<ProductList> {
                     searchQuery = value;
                     filteredProducts = products
                         .where((product) =>
-                            product.name
-                                .toLowerCase()
-                                .contains(searchQuery.toLowerCase()) ||
-                            product.id
-                                .toString()
-                                .contains(searchQuery.toLowerCase()))
+                    product.name
+                        .toLowerCase()
+                        .contains(searchQuery.toLowerCase()) ||
+                        product.id
+                            .toString()
+                            .contains(searchQuery.toLowerCase()))
                         .toList();
                   });
                 },
@@ -142,40 +142,40 @@ class _ProductListState extends State<ProductList> {
                                 ),
                               widget.admin!
                                   ? Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: [
-                                        ElevatedButton(
-                                          child: Text('تعديل'),
-                                          onPressed: () {
-                                            _editProduct(product.id!);
-                                          },
-                                        ),
-                                        SizedBox(width: 8.w),
-                                        ElevatedButton(
-                                          child: Text('حذف'),
-                                          onPressed: () {
-                                            _deleteProduct(product.id!);
-                                          },
-                                          style: ButtonStyle(
-                                            backgroundColor:
-                                                MaterialStateProperty.all<
-                                                    Color>(Colors.red),
-                                          ),
-                                        ),
-                                        SizedBox(width: 20.w)
-                                      ],
-                                    )
-                                  : ElevatedButton(
-                                      child: Text('اضافه'),
-                                      onPressed: () {
-
-                                      },
-                                      style: ButtonStyle(
-                                        backgroundColor:
-                                            MaterialStateProperty.all<Color>(
-                                                Colors.blue),
-                                      ),
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  ElevatedButton(
+                                    child: Text('تعديل'),
+                                    onPressed: () {
+                                      _editProduct(product.id!);
+                                    },
+                                  ),
+                                  SizedBox(width: 8.w),
+                                  ElevatedButton(
+                                    child: Text('حذف'),
+                                    onPressed: () {
+                                      _deleteProduct(product.id!);
+                                    },
+                                    style: ButtonStyle(
+                                      backgroundColor:
+                                      MaterialStateProperty.all<
+                                          Color>(Colors.red),
                                     ),
+                                  ),
+                                  SizedBox(width: 20.w)
+                                ],
+                              )
+                                  : ElevatedButton(
+                                child: Text('اضافه'),
+                                onPressed: () {
+
+                                },
+                                style: ButtonStyle(
+                                  backgroundColor:
+                                  MaterialStateProperty.all<Color>(
+                                      Colors.blue),
+                                ),
+                              ),
                             ],
                           ),
                           SizedBox(height: 16.h),
@@ -189,11 +189,11 @@ class _ProductListState extends State<ProductList> {
             SizedBox(height: 16.h),
             (widget.admin!)
                 ? Center(
-                    child: ElevatedButton(
-                      onPressed: _addProduct,
-                      child: Text('إضافة منتج جديد'),
-                    ),
-                  )
+              child: ElevatedButton(
+                onPressed: _addProduct,
+                child: Text('إضافة منتج جديد'),
+              ),
+            )
                 : SizedBox(),
             SizedBox(height: 25.h)
           ],
@@ -235,7 +235,7 @@ class _ProductListState extends State<ProductList> {
 
   void _editProduct(int productId) {
     Product selectedProduct =
-        products.firstWhere((product) => product.id == productId);
+    products.firstWhere((product) => product.id == productId);
 
     Navigator.push(
       context,
