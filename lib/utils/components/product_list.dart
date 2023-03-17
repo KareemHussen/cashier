@@ -53,154 +53,164 @@ class _ProductListState extends State<ProductList> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            if (widget.title != null)
-              Center(
-                child: Text(
-                  widget.title!,
-                  style: TextStyle(fontSize: 48.sp),
-                ),
-              ),
-            if (widget.subtitle != null)
-              Center(
-                child: Text(
-                  widget.subtitle!,
-                  style: TextStyle(fontSize: 32.sp),
-                ),
-              ),
-            SizedBox(height: 32.h),
-            // Display the common factors
-// Display the search bar
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.w),
-              child: TextField(
-                decoration: InputDecoration(
-                  contentPadding: EdgeInsets.fromLTRB(0, 0, 900.w, 0),
-                  hintText: 'البحث عن منتج',
-                ),
-                onChanged: (value) {
-                  setState(() {
-                    searchQuery = value;
-                    filteredProducts = products
-                        .where((product) =>
-                            product.name
-                                .toLowerCase()
-                                .contains(searchQuery.toLowerCase()) ||
-                            product.id
-                                .toString()
-                                .contains(searchQuery.toLowerCase()))
-                        .toList();
-                  });
-                },
-              ),
-            ),
-            Row(
-              children: [
-                for (String factor in commonFactors)
-                  (factor == 'name')?
-                  Expanded(
-                    flex: 2,
-                    child: Text(
-                      arabic[commonFactors.indexOf(factor)],
-                      style: TextStyle(
-                          fontSize: 28.sp, fontWeight: FontWeight.bold),
-                    ),
-                  ):Expanded(
-                    flex: 1,
-                    child: Text(
-                      arabic[commonFactors.indexOf(factor)],
-                      style: TextStyle(
-                          fontSize: 28.sp, fontWeight: FontWeight.bold),
-                    ),
+            if (products.isNotEmpty)
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.w),
+                child: TextField(
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.fromLTRB(0, 0, 820.w, 0),
+                    hintText: 'البحث عن منتج',
                   ),
-                SizedBox(width: 130)
-              ],
-            ),
+                  onChanged: (value) {
+                    setState(() {
+                      searchQuery = value;
+                      filteredProducts = products
+                          .where((product) =>
+                              product.name
+                                  .toLowerCase()
+                                  .contains(searchQuery.toLowerCase()) ||
+                              product.id
+                                  .toString()
+                                  .contains(searchQuery.toLowerCase()))
+                          .toList();
+                    });
+                  },
+                ),
+              ),
+            if (products.isNotEmpty)
+              Row(
+                children: [
+                  for (String factor in commonFactors)
+                    (factor == 'name')
+                        ? Expanded(
+                            flex: 2,
+                            child: Text(
+                              arabic[commonFactors.indexOf(factor)],
+                              style: TextStyle(
+                                  fontSize: 28.sp, fontWeight: FontWeight.bold),
+                            ),
+                          )
+                        : Expanded(
+                            flex: 1,
+                            child: Text(
+                              arabic[commonFactors.indexOf(factor)],
+                              style: TextStyle(
+                                  fontSize: 28.sp, fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                  SizedBox(width: 130)
+                ],
+              ),
             SizedBox(height: 16.h),
             // Display the individual items
-            Expanded(
-              child: SingleChildScrollView(
-                child: Container(
-                  decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.1),
-                        spreadRadius: 12,
-                        blurRadius: 50,
-                        offset: Offset(0, 5),
-                      ),
-                    ],
-                  ),
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    physics: AlwaysScrollableScrollPhysics(),
-                    itemCount: filteredProducts.length,
-                    itemBuilder: (context, index) {
-                      Product product = filteredProducts[index];
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              for (String factor in commonFactors)
-                                (factor == 'name')?
-                                Expanded(
-                                  flex: 2,
-                                  child: Text(
-                                    maxLines: 1,
-                                    product.toJson()[factor].toString(),
-                                    style: TextStyle(
-                                        fontSize: 28.sp,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ):Expanded(
-                                  flex: 1,
-                                  child: Text(
-                                    maxLines: 1,
-                                    product.toJson()[factor].toString(),
-                                    style: TextStyle(
-                                        fontSize: 28.sp,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                              widget.admin!
-                                  ? Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: [
-                                        ElevatedButton(
-                                          child: Text('تعديل'),
-                                          onPressed: () {
-                                            _editProduct(product.id!);
-                                          },
-                                        ),
-                                        SizedBox(width: 8.w),
-                                        ElevatedButton(
-                                          child: Text('حذف'),
-                                          onPressed: () {
-                                            _deleteProduct(product.id!);
-                                          },
-                                          style: ButtonStyle(
-                                            backgroundColor:
-                                                MaterialStateProperty.all<
-                                                    Color>(Colors.red),
-                                          ),
-                                        ),
-                                        SizedBox(width: 20.w)
-                                      ],
-                                    )
-                                  : SizedBox(
-                                      width: 0,
-                                      height: 0,
-                                    ),
-                            ],
+            (products.isEmpty)
+                ? Center(
+                    child: Column(
+                      children: [
+                        SizedBox(height: 400.h),
+                        Text(
+                          "لا يوجد شئ للعرض",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 40.sp,
+                            fontWeight: FontWeight.bold,
                           ),
-                          SizedBox(height: 16.h),
-                        ],
-                      );
-                    },
+                        ),
+                      ],
+                    ),
+                  )
+                : Expanded(
+                    child: SingleChildScrollView(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.1),
+                              spreadRadius: 12,
+                              blurRadius: 50,
+                              offset: Offset(0, 5),
+                            ),
+                          ],
+                        ),
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          physics: AlwaysScrollableScrollPhysics(),
+                          itemCount: filteredProducts.length,
+                          itemBuilder: (context, index) {
+                            Product product = filteredProducts[index];
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    for (String factor in commonFactors)
+                                      (factor == 'name')
+                                          ? Expanded(
+                                              flex: 2,
+                                              child: Text(
+                                                maxLines: 1,
+                                                product
+                                                    .toJson()[factor]
+                                                    .toString(),
+                                                style: TextStyle(
+                                                    fontSize: 28.sp,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            )
+                                          : Expanded(
+                                              flex: 1,
+                                              child: Text(
+                                                maxLines: 1,
+                                                product
+                                                    .toJson()[factor]
+                                                    .toString(),
+                                                style: TextStyle(
+                                                    fontSize: 28.sp,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ),
+                                    widget.admin!
+                                        ? Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.end,
+                                            children: [
+                                              ElevatedButton(
+                                                child: Text('تعديل'),
+                                                onPressed: () {
+                                                  _editProduct(product.id!);
+                                                },
+                                              ),
+                                              SizedBox(width: 8.w),
+                                              ElevatedButton(
+                                                child: Text('حذف'),
+                                                onPressed: () {
+                                                  _deleteProduct(product.id!);
+                                                },
+                                                style: ButtonStyle(
+                                                  backgroundColor:
+                                                      MaterialStateProperty.all<
+                                                          Color>(Colors.red),
+                                                ),
+                                              ),
+                                              SizedBox(width: 20.w)
+                                            ],
+                                          )
+                                        : SizedBox(
+                                            width: 160.w,
+                                            height: 0,
+                                          ),
+                                  ],
+                                ),
+                                SizedBox(height: 16.h),
+                              ],
+                            );
+                          },
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-              ),
-            ),
             SizedBox(height: 16.h),
             (widget.admin!)
                 ? Center(
@@ -260,12 +270,11 @@ class _ProductListState extends State<ProductList> {
           product: selectedProduct,
           onEdit: (product) {
             setState(() {
-
               products[products.indexWhere((p) => p.id == product.id)] =
                   product;
             });
           },
-          onSave: (product){},
+          onSave: (product) {},
           onDelete: (product) {
             setState(() {
               SQLHelper.deleteProduct(productId);
@@ -286,10 +295,9 @@ class _ProductListState extends State<ProductList> {
           buttonText: "add",
           onSave: (product) {
             products.add(product);
-            setState(() {
-            });
+            setState(() {});
           },
-          onEdit: (Product){},
+          onEdit: (Product) {},
           product: null,
           onDelete: (Product) {},
         ),

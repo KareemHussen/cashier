@@ -1,5 +1,9 @@
+import 'dart:collection';
+
 import 'package:cashier/data/local/database.dart';
 import 'package:cashier/data/model/Product.dart';
+import 'package:cashier/screens/storage/storage.dart';
+import 'package:cashier/screens/storage/storage_cubit.dart';
 import 'package:cashier/utils/components/invoice_item.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
@@ -14,8 +18,9 @@ import '../../data/model/Invoice.dart';
 class InvoiceForm extends StatefulWidget {
   //final String buttonText;
   Invoice? invoice;
-  List<Product>? cartItems;
+  HashMap<Product , int> cartItems = HashMap<Product , int>();
   List<Product> products = <Product>[];
+  List<Product> items =<Product>[Product(id: 0, name: ",kdd", quantity: 4, buyPrice: 3, sellPrice: 5)];
   // final Function(Invoice) onSave;
   // final Function(Invoice) onDelete;
 
@@ -38,27 +43,18 @@ class _InvoiceFormState extends State<InvoiceForm> {
   void initState() {
     super.initState();
     // Set the initial values for the fields based on the product
-    widget.cartItems ?? <Product>[];
-    widget.invoice ?? Invoice(products: <Product>[], price: 0 , time: null, gain: null, date: '', hour: '');
+    widget.cartItems;
+    widget.invoice ?? Invoice(products: widget.cartItems, price: 0);
   }
 
   @override
   Widget build(BuildContext context) {
     bool flag = widget.invoice == null;
     if (flag) {
-      widget.invoice = Invoice(products: <Product>[], price: 0, time: null, gain: null, date: '', hour: '');
+      widget.invoice = Invoice(products: widget.cartItems, price: 0);
     }
-    SQLHelper.getproducts().then((value) {
-      for (Map<String, dynamic> pro in value) {
-        widget.products.add(Product(
-            id: pro['id'],
-            name: pro['name'],
-            quantity: pro['quantity'],
-            buyPrice: pro['buyPrice'],
-            sellPrice: pro['sellPrice']));
-      }
-    });
-
+    widget.products = StorageCubit.get(context).products;
+    var items = widget.items;
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
@@ -75,29 +71,39 @@ class _InvoiceFormState extends State<InvoiceForm> {
               children: [
                 ElevatedButton(
                     onPressed: () async {
-                      final ttf = await fontFromAssetBundle('assets/font.ttf');
+                      int total = 0;
+                      widget.cartItems.forEach((key, value) {
+                        items.add(key);
+                        total+=key.sellPrice * value;
+                      });
+                      Invoice invoice = Invoice(products: widget.cartItems,
+                          price: total , timestamp: DateTime.now().millisecondsSinceEpoch);
+                      final ttf = await fontFromAssetBundle('assets/font2.ttf');
                       final doc = pw.Document();
                       doc.addPage(pw.Page(
                           pageFormat: PdfPageFormat.a4,
                           build: (pw.Context context) {
                             return pw.Column(children: [
-                              pw.Center(child: pw.Text( 'اولاد ميروك'
-                                  , style: pw.TextStyle(font: ttf, fontSize: 250))),
-                              pw.Center(child: pw.Text( '${DateTime.now()} التاريخ و الوقت '
-                                  , style: pw.TextStyle(font: ttf, fontSize: 10))),
+                              pw.Center(child: pw.Text( 'اولاد مبروك'
+                                  , style: pw.TextStyle(font: ttf, fontSize: 30),
+                                  textDirection: pw.TextDirection.rtl)),
+                              pw.Center(child: pw.Text( ' التاريخ و الوقت ${DateTime.now().toString()}'
+                                  , style: pw.TextStyle(font: ttf, fontSize: 10),
+                                  textDirection: pw.TextDirection.rtl)),
                               pw.Column(
                                   children: List.generate(
-                                      widget.cartItems?.length ?? 0,
+                                      widget.cartItems.length,
                                       (index) => printerItem(
-                                          widget.cartItems?[index] ??
-                                              Product(
-                                                  id: -1,
-                                                  name: 'error',
-                                                  quantity: -1,
-                                                  buyPrice: -1,
-                                                  sellPrice: -1),
-                                          4,
+                                          items[index], widget.cartItems[items[index]] ?? 0,
                                           index , ttf))),
+                              pw.SizedBox(height: 15.h),
+                              pw.Center(child: pw.Text('--------------------------------------------------------------------'
+                            , style: pw.TextStyle(font: ttf, fontSize: 15),
+                            textDirection: pw.TextDirection.rtl)),
+                              pw.SizedBox(height: 15.h),
+                              pw.Center(child: pw.Text(' الاجمالي : $total'
+                                  , style: pw.TextStyle(font: ttf, fontSize: 15),
+                                  textDirection: pw.TextDirection.rtl))
                             ]); // Center
                           })); // Page
                       await Printing.layoutPdf(
@@ -116,11 +122,11 @@ class _InvoiceFormState extends State<InvoiceForm> {
                       hintText: "اختر المنتجات",
                     ),
                   ),
-                  onChanged: (p) {
-                    widget.cartItems = p;
-                    List.generate(
-                        widget.cartItems?.length ?? 0, (index) => null);
-                  },
+                  onChanged: (p) { for (var element in p)
+                  {widget.cartItems[element] = widget.cartItems[element] ?? 1;}
+                  setState(() {
+                    items = p;
+                  });}                    ,
                   compareFn: (p1, p2) => p1.id == p2.id,
                   filterFn: (p, q) =>
                       p.name.toLowerCase().contains(q.toLowerCase()),
@@ -129,12 +135,12 @@ class _InvoiceFormState extends State<InvoiceForm> {
                 SizedBox(height: 16.h),
                 Column(
                   children:
-                      List.generate(widget.cartItems?.length ?? 0, (index) {
+                      List.generate(items.length, (index) {
                     return Row(
                       children: [
-                        InvoiceItem(p: widget.cartItems![index]),
+                        InvoiceItem(p: items[index]),
                         TextButton(
-                            onPressed: () => _removeItem(index),
+                            onPressed: () => _removeItem(items[index]),
                             child: const Text('حذف'))
                       ],
                     );
@@ -148,16 +154,33 @@ class _InvoiceFormState extends State<InvoiceForm> {
     );
   }
 
-  void _removeItem(int i) {
-    setState(() => widget.cartItems?.removeAt(i));
+  void _removeItem(Product i) {
+    setState(() {
+      widget.cartItems.remove(i);
+      widget.items.remove(i);
+    });
   }
 
-  pw.Row printerItem(Product p, int quantity, int index , pw.Font ttf) {
-    return pw.Row(
+  pw.Column printerItem(Product p, int quantity, int index , pw.Font ttf) {
+    return pw.Column(
       children: [
-        pw.Text((index + 1).toString()),
-        pw.Text('${p.name} أسم المنتج ' , style: pw.TextStyle(font: ttf, fontSize: 20)) ,
-        pw.Text('${p.sellPrice} سعر المنتج ', style: pw.TextStyle(font: ttf, fontSize: 20)),
+        pw.SizedBox(height: 13.h),
+        pw.Row(
+          mainAxisAlignment: pw.MainAxisAlignment.spaceEvenly,
+          mainAxisSize: pw.MainAxisSize.max,
+          children: [
+            pw.Text(' سعر الكمية : ${p.sellPrice * quantity}', style: pw.TextStyle(font: ttf, fontSize: 16),
+                textDirection: pw.TextDirection.rtl),
+            pw.Text(' سعر المنتج : ${p.sellPrice}', style: pw.TextStyle(font: ttf, fontSize: 16),
+                textDirection: pw.TextDirection.rtl),
+            pw.Text(' الكمية : $quantity', style: pw.TextStyle(font: ttf, fontSize: 16),
+                textDirection: pw.TextDirection.rtl),
+            pw.Text(' اسم المنتج : ${p.name}' , style: pw.TextStyle(font: ttf, fontSize: 16),
+                textDirection: pw.TextDirection.rtl) ,
+            pw.Text('(${index + 1})', style: pw.TextStyle(font: ttf, fontSize: 16),
+                textDirection: pw.TextDirection.rtl),
+          ],
+        ),
       ],
     );
   }

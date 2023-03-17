@@ -7,9 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../utils/components/product_list.dart';
 
-class Storage extends StatelessWidget {
-  Storage({Key? key}) : super(key: key);
-  String? title = 'إدارة المخزن';
+class Shorfalls extends StatelessWidget {
+  Shorfalls({Key? key}) : super(key: key);
+  String? title = 'جرد النواقص';
   List<Product> products = [];
 
 
@@ -25,12 +25,12 @@ class Storage extends StatelessWidget {
         listener: (context, state) {
         },
         builder: (context, state) {
-        products = StorageCubit.get(context).products;
+          products = StorageCubit.get(context).products.where((product) => product.quantity < 15).toList();
           return ProductList(
               products: products,
               title: null,
               subtitle: null,
-              admin: true
+              admin: false
           );
         },
       ),
