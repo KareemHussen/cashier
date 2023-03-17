@@ -3,7 +3,7 @@ import 'dart:collection';
 import 'package:cashier/data/model/Product.dart';
 
 class Invoice {
-  int? price;
+  double? price;
   int? id;
   HashMap<Product, int> products;
   late List<Product>? productsList;
@@ -31,7 +31,7 @@ class Invoice {
     return Invoice(
       id: json['id'] as int?,
       products: json['products'],
-      price: json['price'] as int?,
+      price: json['price'] as double?,
       timestamp: json['time'] as int?,
      // productList: json['P'],
       //gain: json['gain'] as int?,
