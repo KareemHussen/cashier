@@ -2,6 +2,8 @@ import 'dart:collection';
 
 import 'package:cashier/data/local/database.dart';
 import 'package:cashier/data/model/Product.dart';
+import 'package:cashier/screens/storage/storage.dart';
+import 'package:cashier/screens/storage/storage_cubit.dart';
 import 'package:cashier/utils/components/invoice_item.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +20,7 @@ class InvoiceForm extends StatefulWidget {
   Invoice? invoice;
   HashMap<Product , int> cartItems = HashMap<Product , int>();
   List<Product> products = <Product>[];
-  List<Product> items =<Product>[];
+  List<Product> items =<Product>[Product(id: 0, name: ",kdd", quantity: 4, buyPrice: 3, sellPrice: 5)];
   // final Function(Invoice) onSave;
   // final Function(Invoice) onDelete;
 
@@ -51,17 +53,7 @@ class _InvoiceFormState extends State<InvoiceForm> {
     if (flag) {
       widget.invoice = Invoice(products: widget.cartItems, price: 0);
     }
-    SQLHelper.getproducts().then((value) {
-      for (Map<String, dynamic> pro in value) {
-        widget.products.add(Product(
-            id: pro['id'],
-            name: pro['name'],
-            quantity: pro['quantity'],
-            buyPrice: pro['buyPrice'],
-            sellPrice: pro['sellPrice']));
-      }
-    });
-
+    widget.products = StorageCubit.get(context).products;
     var items = widget.items;
     return Directionality(
       textDirection: TextDirection.rtl,
@@ -131,7 +123,10 @@ class _InvoiceFormState extends State<InvoiceForm> {
                     ),
                   ),
                   onChanged: (p) { for (var element in p)
-                  {widget.cartItems[element] = widget.cartItems[element] ?? 1;}}                    ,
+                  {widget.cartItems[element] = widget.cartItems[element] ?? 1;}
+                  setState(() {
+                    items = p;
+                  });}                    ,
                   compareFn: (p1, p2) => p1.id == p2.id,
                   filterFn: (p, q) =>
                       p.name.toLowerCase().contains(q.toLowerCase()),
