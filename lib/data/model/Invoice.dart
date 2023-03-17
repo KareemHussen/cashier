@@ -6,8 +6,8 @@ class Invoice {
   List<Product> products;
 
   Invoice(
-      {required this.id,
-        required this.products,
-        required this.price,
+      {this.id,
+      required this.products,
+      required this.price,
       });
 }
