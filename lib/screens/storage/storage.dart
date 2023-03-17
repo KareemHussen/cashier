@@ -45,7 +45,6 @@ class Storage extends StatelessWidget {
 
 
     SQLHelper.getproducts().then((value) {
-      // notes = [];
       for (Map<String, dynamic> pro in value) {
         products.add(Product(
             id: pro['id'],
@@ -53,7 +52,7 @@ class Storage extends StatelessWidget {
             quantity: pro['quantity'],
             buyPrice: pro['buyPrice'],
             sellPrice: pro['sellPrice']
-        )
+            )
         );
       }
       print(products.length);
