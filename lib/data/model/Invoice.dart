@@ -6,8 +6,8 @@ class Invoice {
   int? price;
   int? id;
   HashMap<Product, int> products;
+  late List<Product>? productsList;
   int? timestamp;
-
 
   Invoice(
       {
@@ -15,8 +15,14 @@ class Invoice {
         this.timestamp,
         required this.products,
         required this.price,
-      });
+      }) : productsList = generateList(products);
 
+
+  static List<Product> generateList(HashMap<Product, int> m){
+    List<Product> products = [];
+    m.forEach((key, value) {products.add(key);});
+    return products;
+  }
 
   factory Invoice.fromJson(Map<String, dynamic> json) {
     var productList = json['products'] as List<dynamic>;
@@ -24,19 +30,20 @@ class Invoice {
 
     return Invoice(
       id: json['id'] as int?,
-      products: products,
+      products: json['products'],
       price: json['price'] as int?,
-      time: json['time'] as int?,
-      gain: json['gain'] as int?,
+      timestamp: json['time'] as int?,
+     // productList: json['P'],
+      //gain: json['gain'] as int?,
     );
   }
 
   Map<String, dynamic> toJson() => {
     'id': id,
     'price': price,
-    'products': products.map((item) => item.toJson()).toList(),
-    'time': time,
-    'gain': gain,
+    'products': products,//products.map((item) => item.toJson()).toList(),
+    'time': timestamp,
+    'gain': price,
   };
 
 }

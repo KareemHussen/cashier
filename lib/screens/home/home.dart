@@ -139,17 +139,17 @@ class _HomeScreenState extends State<HomeScreen> {
                           List<Product> products = productList.map((item) => Product.fromJson(item)).toList();
 
 
-                          invoices.add(Invoice(
-                              id: invoice['id'],
-                              price: invoice['price'],
-                              products: products,
-                              time: invoice['time'],
-                              gain: invoice['gain']
-                          )
-                          );
+                          // invoices.add(Invoice(
+                          //     id: invoice['id'],
+                          //     price: invoice['price'],
+                          //     products: products,
+                          //     time: invoice['time'],
+                          //     gain: invoice['gain']
+                          // )
+                          // );
                         }
 
-                        print(invoices[2].time);
+                        //print(invoices[2].time);
                       });
                     },
                     style: ElevatedButton.styleFrom(
