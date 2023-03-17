@@ -3,6 +3,7 @@ import 'package:cashier/screens/home/home.dart';
 import 'package:cashier/screens/storage/storage.dart';
 import 'package:cashier/screens/storage/storage_cubit.dart';
 import 'package:cashier/utils/bloc_observer/bloc_observer.dart';
+import 'package:cashier/utils/components/invoice_cubit.dart';
 import 'package:cashier/utils/prtint/print_pdf.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,6 +17,8 @@ Future<void> main() async {
   runApp(MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => StorageCubit()..getProducts()),
+        BlocProvider(create: (context) => InvoiceCubit()..getInvoice()),
+
       ],
       child: MaterialApp(
           debugShowCheckedModeBanner: false,
