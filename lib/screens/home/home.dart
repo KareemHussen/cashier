@@ -110,6 +110,28 @@ class _HomeScreenState extends State<HomeScreen> {
                       SQLHelper.addInvoice(90, _items , calculateGain(_items)).then((value) => {
                           print(value)
                       });
+
+
+                      // SQLHelper.getInvoicesByTime(1, 1679063225721).then((value) {
+                      //   for (Map<String, dynamic> invoice in value) {
+                      //
+                      //     List<dynamic> productList = jsonDecode(invoice['products']);
+                      //     List<Product> products = productList.map((item) => Product.fromJson(item)).toList();
+                      //
+                      //
+                      //     invoices.add(Invoice(
+                      //         id: invoice['id'],
+                      //         price: invoice['price'],
+                      //         products: products,
+                      //         time: invoice['time'],
+                      //         gain: invoice['gain']
+                      //     )
+                      //     );
+                      //   }
+                      //
+                      //   print(invoices.length);
+                      // });
+
                       SQLHelper.getInvoices().then((value) {
                         for (Map<String, dynamic> invoice in value) {
 
@@ -126,7 +148,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           )
                           );
                         }
-                        print(invoices[4].gain);
+
+                        print(invoices[2].time);
                       });
                     },
                     style: ElevatedButton.styleFrom(

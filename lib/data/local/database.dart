@@ -140,6 +140,12 @@ class SQLHelper {
     return db.query('invoices', where: "id = ?", whereArgs: [id]);
   }
 
+  static Future<List<Map<String, dynamic>>> getInvoicesByTime(int startTimestamp, int endTimestamp) async {
+    final db = await SQLHelper.initDb();
+    List<Map<String, dynamic>> list = await db.rawQuery('SELECT * FROM invoices WHERE time BETWEEN ? AND ?', [startTimestamp, endTimestamp]);
+    return list;
+  }
+
   //get invoice by time
   static Future<List<Map<String, dynamic>>> getInvoiceByTime(DateTime id) async {
     final db = await SQLHelper.initDb();
