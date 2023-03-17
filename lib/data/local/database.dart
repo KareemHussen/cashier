@@ -49,7 +49,7 @@ class SQLHelper {
       id INTEGER PRIMARY KEY,
       price INTEGER NOT NULL,
       products TEXT NOT NULL,
-      time INTEGER NOT NULL
+      time INTEGER NOT NULL,
       )
   ''');
     debugPrint("table Created");

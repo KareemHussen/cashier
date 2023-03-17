@@ -5,6 +5,7 @@ class Invoice {
   int? id;
   List<Product> products;
 
+
   Invoice(
       {this.id,
       required this.products,

@@ -6,7 +6,6 @@ import 'package:cashier/screens/buy/Buy.dart';
 import 'package:cashier/screens/storage/storage.dart';
 import 'package:cashier/utils/components/invoice_form.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -43,9 +42,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   ElevatedButton(
                     onPressed: () {
-                      if (kDebugMode) {
-                        print("done");
-                      }
+                      // if (kDebugMode) {
+                      //   print("done");
+                      // }
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => Buy()),
@@ -97,6 +96,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             )
+
+
           ],
         ),
       ),
