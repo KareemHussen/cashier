@@ -5,6 +5,7 @@ import 'package:cashier/data/local/database.dart';
 import 'package:cashier/data/model/Invoice.dart';
 import 'package:cashier/data/model/Product.dart';
 import 'package:cashier/screens/buy/Buy.dart';
+import 'package:cashier/screens/shortfalls/shortfalls.dart';
 import 'package:cashier/screens/storage/storage.dart';
 import 'package:cashier/utils/components/invoice_form.dart';
 import 'package:flutter/cupertino.dart';
@@ -27,12 +28,12 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Center(
         child: Column(
           children: [
-            const SizedBox(height: 30),
-            const Text(
+             SizedBox(height: 30.h),
+             Text(
               "أولاد مبروك",
               style: TextStyle(
                 color: Colors.black,
-                fontSize: 100,
+                fontSize: 80.sp,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -44,9 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   ElevatedButton(
                     onPressed: () {
-                      // if (kDebugMode) {
-                      //   print("done");
-                      // }
+
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => Buy()),
@@ -62,95 +61,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      List<Product> _items = [
-                        Product(
-                            name: 'كرتونه بيض احمر',
-                            quantity: 1,
-                            buyPrice: 12,
-                            sellPrice: 14,
-                            id: 1),
-                        Product(
-                            name: 'طماطم حمرا', quantity: 2, buyPrice: 12, sellPrice: 14, id: 1),
-                        Product(
-                            name: 'فلفل احمر', quantity: 3, buyPrice: 12, sellPrice: 14, id: 1),
-                        Product(
-                            name: 'كرتونه بيض احمر',
-                            quantity: 1,
-                            buyPrice: 12,
-                            sellPrice: 14,
-                            id: 1),
-                        Product(
-                            name: 'طماطم حمرا', quantity: 2, buyPrice: 12, sellPrice: 14, id: 1),
-                        Product(
-                            name: 'فلفل احمر', quantity: 3, buyPrice: 12, sellPrice: 14, id: 1),
-                        Product(
-                            name: 'كرتونه بيض احمر',
-                            quantity: 1,
-                            buyPrice: 12,
-                            sellPrice: 14,
-                            id: 1),
-                        Product(
-                            name: 'طماطم حمرا', quantity: 2, buyPrice: 12, sellPrice: 14, id: 1),
-                        Product(
-                            name: 'فلفل احمر', quantity: 3, buyPrice: 12, sellPrice: 14, id: 1),
-                        Product(
-                            name: 'كرتونه بيض احمر',
-                            quantity: 1,
-                            buyPrice: 12,
-                            sellPrice: 14,
-                            id: 1),
-                        Product(
-                            name: 'طماطم حمرا', quantity: 2, buyPrice: 12, sellPrice: 14, id: 1),
-                        Product(
-                            name: 'فلفل احمر', quantity: 3, buyPrice: 12, sellPrice: 14, id: 1),
-                      ];
-                      List<Invoice> invoices = [];
-
-
-                      SQLHelper.addInvoice(90, _items , calculateGain(_items)).then((value) => {
-                          print(value)
-                      });
-
-
-                      // SQLHelper.getInvoicesByTime(1, 1679063225721).then((value) {
-                      //   for (Map<String, dynamic> invoice in value) {
-                      //
-                      //     List<dynamic> productList = jsonDecode(invoice['products']);
-                      //     List<Product> products = productList.map((item) => Product.fromJson(item)).toList();
-                      //
-                      //
-                      //     invoices.add(Invoice(
-                      //         id: invoice['id'],
-                      //         price: invoice['price'],
-                      //         products: products,
-                      //         time: invoice['time'],
-                      //         gain: invoice['gain']
-                      //     )
-                      //     );
-                      //   }
-                      //
-                      //   print(invoices.length);
-                      // });
-
-                      SQLHelper.getInvoices().then((value) {
-                        for (Map<String, dynamic> invoice in value) {
-
-                          List<dynamic> productList = jsonDecode(invoice['products']);
-                          List<Product> products = productList.map((item) => Product.fromJson(item)).toList();
-
-
-                          invoices.add(Invoice(
-                              id: invoice['id'],
-                              price: invoice['price'],
-                              products: products,
-                              time: invoice['time'],
-                              gain: invoice['gain']
-                          )
-                          );
-                        }
-
-                        print(invoices[2].time);
-                      });
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Shorfalls()),
+                      );
                     },
                     style: ElevatedButton.styleFrom(
                         primary: Colors.purple,
@@ -158,6 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             horizontal: 60, vertical: 25),
                         textStyle: const TextStyle(
                             fontSize: 30, fontWeight: FontWeight.bold)),
+
                     child: const Text('الجرد'),
                   ),
                   ElevatedButton(
