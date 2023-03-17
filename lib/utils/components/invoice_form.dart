@@ -81,8 +81,10 @@ class _InvoiceFormState extends State<InvoiceForm> {
                           pageFormat: PdfPageFormat.a4,
                           build: (pw.Context context) {
                             return pw.Column(children: [
-                              pw.Center(child: pw.Text( ' التاريخ و الوقت '
-                                  , style: pw.TextStyle(font: ttf, fontSize: 30))),
+                              pw.Center(child: pw.Text( 'اولاد ميروك'
+                                  , style: pw.TextStyle(font: ttf, fontSize: 250))),
+                              pw.Center(child: pw.Text( '${DateTime.now()} التاريخ و الوقت '
+                                  , style: pw.TextStyle(font: ttf, fontSize: 10))),
                               pw.Column(
                                   children: List.generate(
                                       widget.cartItems?.length ?? 0,
