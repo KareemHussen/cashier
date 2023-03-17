@@ -1,6 +1,7 @@
 import 'package:cashier/Invoice/invoice_cubit.dart';
 import 'package:cashier/Invoice/invoice_form.dart';
 import 'package:cashier/data/model/Product.dart';
+import 'package:cashier/utils/prtint/print_pdf.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -20,34 +21,36 @@ class _BuyProductsState extends State<BuyProducts> {
   Widget build(BuildContext context) {
     v = InvoiceCubit.get(context).invoice;
     return Scaffold(
-      body: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               SizedBox(
                 width: 900.w,
-                height: 900.h,
-                child: InvoiceForm(
-                    invoice: v,
+                height: 100.h,
+                child: Column(
+                  children: [
+                    ElevatedButton(onPressed: (){
+                      PrintPdf.checkOut(v);
+                    }, child: const Text('حفظ و طباعة الفاتورة')),
+                    /*SingleChildScrollView(
+                      child: ListView.builder(
+                        itemCount: p.length,
+                          itemBuilder: (context , index){
+
+                          }),
+                    ),*/
+                  ],
                 ),
               ),
-
               SizedBox(
                 width: 900.w,
-                height: 900.h,
-                child: SingleChildScrollView(
-                  child: ListView.builder(
-                    itemCount: p.length,
-                      itemBuilder: (context , index){
-
-                      }),
+                height: 100.h,
+                child: InvoiceForm(
+                  invoice: v,
                 ),
               ),
             ],
           ),
-        ],
-      ),
-    );
+      );
   }
 }

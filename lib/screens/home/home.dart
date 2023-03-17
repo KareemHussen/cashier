@@ -1,9 +1,9 @@
 import 'dart:ui';
 
+import 'package:cashier/Invoice/BuyProducts.dart';
 import 'package:cashier/screens/shortfalls/shortfalls.dart';
 import 'package:cashier/screens/storage/storage.dart';
 import 'package:cashier/screens/storage/storage_cubit.dart';
-import 'package:cashier/utils/components/invoice_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -74,7 +74,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             body: Container(
               width: 1920.w,
               padding: EdgeInsets.all(150.w),
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                   image: DecorationImage(
                       image: AssetImage('assets/images/back.jpg'),
                       fit: BoxFit.fill)),
@@ -160,7 +160,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => InvoiceForm()));
+                                        builder: (context) => const BuyProducts()));
                               },
                               child: const Text(
                                 'إصدار فاتورة',
