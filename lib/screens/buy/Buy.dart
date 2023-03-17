@@ -60,13 +60,32 @@ class _BuyState extends State<Buy> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        width: 900.w,
-        height: 900.h,
-        child: ProductList(
-            products: _items,
-            admin:false
-        ),
+      body: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                width: 900.w,
+                height: 900.h,
+                child: ProductList(
+                    products: _items,
+                    admin:false
+                ),
+              ),
+
+              Container(
+                width: 900.w,
+                height: 900.h,
+                child: ProductList(
+                    products: _items,
+                    admin:false
+                ),
+              ),
+
+            ],
+          ),
+        ],
       ),
     );
   }
