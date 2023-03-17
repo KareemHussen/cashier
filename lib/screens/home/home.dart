@@ -3,9 +3,10 @@ import 'package:cashier/data/model/Product.dart';
 import 'package:cashier/screens/buy/Buy.dart';
 import 'package:cashier/screens/shortfalls/shortfalls.dart';
 import 'package:cashier/screens/storage/storage.dart';
-import 'package:cashier/utils/components/invoice_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import '../../Invoice/invoice_form.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);

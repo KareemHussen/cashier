@@ -2,7 +2,7 @@ import 'dart:collection';
 
 import 'package:cashier/data/model/Product.dart';
 import 'package:cashier/screens/storage/storage_cubit.dart';
-import 'package:cashier/utils/components/invoice_cubit.dart';
+import 'package:cashier/Invoice/invoice_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
