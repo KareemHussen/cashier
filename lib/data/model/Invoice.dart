@@ -6,6 +6,8 @@ class Invoice {
   List<Product> products;
   int? time;
   int? gain;
+  String? date;
+  String? hour;
 
   Invoice(
       {this.id,
@@ -13,7 +15,8 @@ class Invoice {
       required this.price,
         required this.time,
         required this.gain,
-
+        required this.date,
+        required this.hour,
       });
 
 
@@ -27,6 +30,9 @@ class Invoice {
       price: json['price'] as int?,
       time: json['time'] as int?,
       gain: json['gain'] as int?,
+      date: json['date'] as String,
+      hour: json['hour'] as String,
+
     );
   }
 
@@ -36,6 +42,9 @@ class Invoice {
     'products': products.map((item) => item.toJson()).toList(),
     'time': time,
     'gain': gain,
+    'date': date,
+    'hour': hour,
+
   };
 
 }

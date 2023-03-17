@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:cashier/data/model/Product.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
@@ -47,7 +48,9 @@ class SQLHelper {
       price INTEGER NOT NULL,
       products TEXT NOT NULL,
       time INTEGER NOT NULL,
-      gain INTEGER NOT NULL
+      gain INTEGER NOT NULL,
+      date TEXT NOT NULL,
+      hour TEXT NOT NULL
       );
   ''');
     debugPrint("table Created");
@@ -114,14 +117,26 @@ class SQLHelper {
   //////////////////////////////////////////////////////////////////////////////
 
 //add
-  static Future<int> addInvoice(int price, List<Product> products , int gain) async {
+  static Future<int> addInvoice(int price, List<Product> products , int gain ) async {
     final db = await SQLHelper.initDb(); //open database
     final json = jsonEncode(products);
+
+    var currentTime = DateTime.now().millisecondsSinceEpoch;
+
+    var dt = DateTime.fromMillisecondsSinceEpoch(currentTime);
+
+    var d12 = DateFormat('MM/dd/yyyy, hh:mm:ss a').format(dt);
+
+    var date = d12.substring(0 , 10);
+    var hour = d12.substring(12 , 23);
+
     final data = {
       'price': price,
       'products': json,
-      'time': DateTime.now().millisecondsSinceEpoch,
-      'gain' : gain
+      'time': currentTime,
+      'gain' : gain,
+      'date' : date,
+      'hour' : hour
     }; //create data in map
 
     final id = await db.insert('invoices', data); //insert

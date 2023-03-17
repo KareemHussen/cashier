@@ -289,7 +289,7 @@ class _ProductListState extends State<ProductList> {
             setState(() {
             });
           },
-onEdit: (Product){},
+          onEdit: (Product){},
           product: null,
           onDelete: (Product) {},
         ),
