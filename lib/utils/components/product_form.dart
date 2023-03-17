@@ -69,7 +69,7 @@ class _ProductFormState extends State<ProductForm> {
                   onSaved: (value) {
                     widget.product!.name = value!;
                   },                  onChanged: (value) {
-                  widget.product!.name = value!;
+                  widget.product!.name = value;
                 },
                 ),
                 SizedBox(height: 16.h),
@@ -91,7 +91,7 @@ class _ProductFormState extends State<ProductForm> {
                   onSaved: (value) {
                     widget.product!.quantity = int.parse(value!);
                   },                  onChanged: (value) {
-                  widget.product!.quantity = int.parse(value!);
+                  widget.product!.quantity = int.parse(value);
                 },
                 ),
                 SizedBox(height: 16.h),
