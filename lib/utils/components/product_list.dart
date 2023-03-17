@@ -73,7 +73,7 @@ class _ProductListState extends State<ProductList> {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.w),
               child: TextField(
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   hintText: 'Search',
                 ),
                 onChanged: (value) {
@@ -167,9 +167,7 @@ class _ProductListState extends State<ProductList> {
                                     )
                                   : ElevatedButton(
                                       child: Text('اضافه'),
-                                      onPressed: () {
-
-                                      },
+                                      onPressed: () {},
                                       style: ButtonStyle(
                                         backgroundColor:
                                             MaterialStateProperty.all<Color>(

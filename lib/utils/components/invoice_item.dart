@@ -5,7 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class InvoiceItem extends StatefulWidget {
   final Product p;
-  InvoiceItem({Key? key, required this.p}) : super(key: key)
+  const InvoiceItem({Key? key, required this.p}) : super(key: key);
   @override
   State<InvoiceItem> createState() => _InvoiceItemState();
 }
@@ -16,31 +16,29 @@ class _InvoiceItemState extends State<InvoiceItem> {
   void initState() {
     super.initState();
     // Set the initial values for the fields based on the product
-     p = widget.p;
+    p = widget.p;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Text(
-            p.name,
-            style: TextStyle(fontSize: 28.sp, fontWeight: FontWeight.bold),
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Text(
+          p.name,
+          style: TextStyle(fontSize: 28.sp, fontWeight: FontWeight.bold),
+        ),
+        TextField(
+          autocorrect: false,
+          keyboardType: TextInputType.number,
+          inputFormatters: <TextInputFormatter>[
+            FilteringTextInputFormatter.digitsOnly
+          ],
+          decoration: const InputDecoration(
+              hintText: 'الكمية'
           ),
-          TextField(
-            autocorrect: false,
-            keyboardType: TextInputType.number,
-            inputFormatters: <TextInputFormatter>[
-              FilteringTextInputFormatter.digitsOnly
-            ],
-            decoration: const InputDecoration(
-                hintText: 'الكمية'
-            ),
-          )
-        ],
-      ),
+        )
+      ],
     );
   }
 }

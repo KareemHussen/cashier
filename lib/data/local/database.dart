@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:cashier/data/model/Product.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart' as sql;
@@ -15,7 +16,9 @@ class SQLHelper {
     final directory = await databaseFactoryFfi.getDatabasesPath();
     final path = join(directory, 'aa.db');
     DatabaseFactory databaseFactory = databaseFactoryFfi;
-    print(path + " ggggggggggggggggggggg");
+    if (kDebugMode) {
+      print(path + " ggggggggggggggggggggg");
+    }
     return await databaseFactory.openDatabase(
       path,
       options: OpenDatabaseOptions(
@@ -56,7 +59,9 @@ class SQLHelper {
   static Future<int> addProduct(
       String name, int quantity, int buyPrice, int sellPrice) async {
     final db = await SQLHelper.initDb(); //open database
-    print(name);
+    if (kDebugMode) {
+      print(name);
+    }
     final data = {
       'name': name,
       'quantity': quantity,
@@ -102,7 +107,9 @@ class SQLHelper {
     try {
       await db.delete("products", where: "id = ?", whereArgs: [id]);
     } catch (err) {
-      print("Something went wrong when : $err");
+      if (kDebugMode) {
+        print("Something went wrong when : $err");
+      }
     }
   }
 
@@ -161,7 +168,9 @@ class SQLHelper {
     try {
       await db.delete("invoices", where: "id = ?", whereArgs: [id]);
     } catch (err) {
-      print("Something went wrong when : $err");
+      if (kDebugMode) {
+        print("Something went wrong when : $err");
+      }
     }
   }
 }

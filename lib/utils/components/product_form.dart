@@ -62,7 +62,7 @@ class _ProductFormState extends State<ProductForm> {
               children: [
                 TextFormField(
                   initialValue: widget.product!.name ?? '',
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'اسم المنتج',
                   ),
                   validator: (value) {

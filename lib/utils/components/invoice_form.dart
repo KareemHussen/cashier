@@ -1,5 +1,6 @@
 import 'package:cashier/data/local/database.dart';
 import 'package:cashier/data/model/Product.dart';
+import 'package:cashier/utils/components/invoice_item.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -14,14 +15,13 @@ class InvoiceForm extends StatefulWidget {
   // final Function(Invoice) onSave;
   // final Function(Invoice) onDelete;
 
-  InvoiceForm({
-    this.invoice
-    // required this.products,
-    // required this.buttonText,
-    // required this.invoice,
-    // required this.onSave,
-    // required this.onDelete,
-   });
+  InvoiceForm({this.invoice
+      // required this.products,
+      // required this.buttonText,
+      // required this.invoice,
+      // required this.onSave,
+      // required this.onDelete,
+      });
 
   @override
   _InvoiceFormState createState() => _InvoiceFormState();
@@ -34,7 +34,7 @@ class _InvoiceFormState extends State<InvoiceForm> {
   void initState() {
     super.initState();
     // Set the initial values for the fields based on the product
-    widget.cartItems?? <Product>[];
+    widget.cartItems ?? <Product>[];
     widget.invoice ?? Invoice(products: <Product>[], price: 0);
   }
 
@@ -42,8 +42,7 @@ class _InvoiceFormState extends State<InvoiceForm> {
   Widget build(BuildContext context) {
     bool flag = widget.invoice == null;
     if (flag) {
-      widget.invoice =
-          Invoice(products: <Product>[], price: 0);
+      widget.invoice = Invoice(products: <Product>[], price: 0);
     }
     SQLHelper.getproducts().then((value) {
       for (Map<String, dynamic> pro in value) {
@@ -52,9 +51,7 @@ class _InvoiceFormState extends State<InvoiceForm> {
             name: pro['name'],
             quantity: pro['quantity'],
             buyPrice: pro['buyPrice'],
-            sellPrice: pro['sellPrice']
-        )
-        );
+            sellPrice: pro['sellPrice']));
       }
     });
 
@@ -84,23 +81,40 @@ class _InvoiceFormState extends State<InvoiceForm> {
                       hintText: "اختر المنتجات",
                     ),
                   ),
-                  onChanged: (p){
-                      widget.cartItems =p;
-                      List.generate(widget.cartItems?.length ?? 0, (index) =>
-                      null);
-                    },
-                  compareFn: (p1,p2) => p1.id==p2.id,
-                  filterFn: (p , q)=> p.name.toLowerCase()
-                      .contains(q.toLowerCase()),
+                  onChanged: (p) {
+                    widget.cartItems = p;
+                    List.generate(
+                        widget.cartItems?.length ?? 0, (index) => null);
+                  },
+                  compareFn: (p1, p2) => p1.id == p2.id,
+                  filterFn: (p, q) =>
+                      p.name.toLowerCase().contains(q.toLowerCase()),
                   autoValidateMode: AutovalidateMode.onUserInteraction,
                 ),
                 SizedBox(height: 16.h),
-
+                Column(
+                  children:
+                      List.generate(widget.cartItems?.length ?? 0, (index) {
+                    return Row(
+                      children: [
+                        InvoiceItem(p: widget.cartItems![index]),
+                        TextButton(onPressed: () => _removeItem(index),
+                            child: const Text('حذف'))
+                      ],
+                    );
+                  }),
+                )
               ],
             ),
           ),
         ),
       ),
     );
+  }
+
+
+  void _removeItem(int i) {
+    ;
+    setState(() => widget.cartItems?.removeAt(i));
   }
 }
