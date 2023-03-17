@@ -258,14 +258,14 @@ class _ProductListState extends State<ProductList> {
         builder: (context) => ProductForm(
           buttonText: "edit",
           product: selectedProduct,
-          onSave: (product) {
+          onEdit: (product) {
             setState(() {
-              SQLHelper.updateProduct(productId, product.name, product.quantity,
-                  product.buyPrice, product.sellPrice);
+
               products[products.indexWhere((p) => p.id == product.id)] =
                   product;
             });
           },
+          onSave: (product){},
           onDelete: (product) {
             setState(() {
               SQLHelper.deleteProduct(productId);
@@ -285,11 +285,11 @@ class _ProductListState extends State<ProductList> {
         builder: (context) => ProductForm(
           buttonText: "add",
           onSave: (product) {
+            products.add(product);
             setState(() {
-              products.add(product);
             });
-            // Navigator.of(context).pop();
           },
+onEdit: (Product){},
           product: null,
           onDelete: (Product) {},
         ),
