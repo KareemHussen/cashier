@@ -52,7 +52,6 @@ class _ProductListState extends State<ProductList> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-
             if (widget.title != null)
               Center(
                 child: Text(
@@ -234,7 +233,8 @@ class _ProductListState extends State<ProductList> {
           product: selectedProduct,
           onSave: (product) {
             setState(() {
-              SQLHelper.updateProduct(productId, product.name, product.quantity, product.buyPrice, product.sellPrice);
+              SQLHelper.updateProduct(productId, product.name, product.quantity,
+                  product.buyPrice, product.sellPrice);
               products[products.indexWhere((p) => p.id == product.id)] =
                   product;
             });

@@ -7,19 +7,21 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../data/model/Invoice.dart';
 
 class InvoiceForm extends StatefulWidget {
-  final String buttonText;
+  //final String buttonText;
   Invoice? invoice;
   List<Product>? cartItems;
-  List<Product>? products;
-  final Function(Invoice) onSave;
-  final Function(Invoice) onDelete;
+  List<Product> products = <Product>[];
+  // final Function(Invoice) onSave;
+  // final Function(Invoice) onDelete;
 
   InvoiceForm({
-    required this.buttonText,
-    required this.invoice,
-    required this.onSave,
-    required this.onDelete,
-  });
+    this.invoice
+    // required this.products,
+    // required this.buttonText,
+    // required this.invoice,
+    // required this.onSave,
+    // required this.onDelete,
+   });
 
   @override
   _InvoiceFormState createState() => _InvoiceFormState();
@@ -29,12 +31,11 @@ class _InvoiceFormState extends State<InvoiceForm> {
   final _formKey = GlobalKey<FormState>();
 
   @override
-  Future<void> initState() async {
+  void initState() {
     super.initState();
     // Set the initial values for the fields based on the product
     widget.cartItems?? <Product>[];
     widget.invoice ?? Invoice(products: <Product>[], price: 0);
-    widget.products ?? await SQLHelper.getproducts();
   }
 
   @override
@@ -44,6 +45,18 @@ class _InvoiceFormState extends State<InvoiceForm> {
       widget.invoice =
           Invoice(products: <Product>[], price: 0);
     }
+    SQLHelper.getproducts().then((value) {
+      for (Map<String, dynamic> pro in value) {
+        widget.products.add(Product(
+            id: pro['id'],
+            name: pro['name'],
+            quantity: pro['quantity'],
+            buyPrice: pro['buyPrice'],
+            sellPrice: pro['sellPrice']
+        )
+        );
+      }
+    });
 
     return Directionality(
       textDirection: TextDirection.rtl,
@@ -52,85 +65,37 @@ class _InvoiceFormState extends State<InvoiceForm> {
           title: const Text('تحرير فاتورة'),
         ),
         body: Padding(
-          padding: EdgeInsets.fromLTRB(400.w, 300.h, 400.w, 200.h),
+          padding: EdgeInsets.fromLTRB(400.w, 50.h, 400.w, 200.h),
           child: Form(
             key: _formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                DropdownSearch(
+                DropdownSearch<Product>.multiSelection(
+                  items: widget.products,
+                  // popupProps: const PopupProps.menu(
+                  //   showSelectedItems: true,
+                  // ),
+                  itemAsString: (item) => item.name,
+                  dropdownDecoratorProps: const DropDownDecoratorProps(
+                    dropdownSearchDecoration: InputDecoration(
+                      labelText: "المنتجات",
+                      hintText: "اختر المنتجات",
+                    ),
+                  ),
+                  onChanged: (p){
+                      widget.cartItems =p;
+                      List.generate(widget.cartItems?.length ?? 0, (index) =>
+                      null);
+                    },
+                  compareFn: (p1,p2) => p1.id==p2.id,
+                  filterFn: (p , q)=> p.name.toLowerCase()
+                      .contains(q.toLowerCase()),
+                  autoValidateMode: AutovalidateMode.onUserInteraction,
+                ),
+                SizedBox(height: 16.h),
 
-                )
-               
-                // TextFormField(
-                //   initialValue: widget.product!.sellPrice?.toString(),
-                //   decoration: InputDecoration(
-                //     labelText: 'سعر البيع',
-                //   ),
-                //   keyboardType: TextInputType.number,
-                //   validator: (value) {
-                //     if (value == null || value.isEmpty) {
-                //       return 'برجاء إدخال سعر البيع';
-                //     }
-                //     if (double.tryParse(value) == null) {
-                //       return 'برجاء إدخال سعر بيع صحيح';
-                //     }
-                //     return null;
-                //   },
-                //   onSaved: (value) {
-                //     widget.product!.sellPrice = int.parse(value!);
-                //   },
-                // ),
-                // SizedBox(height: 16.h),
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.center,
-                //   children: [
-                //     if (!flag)
-                //       ElevatedButton(
-                //         onPressed: () {
-                //           showDialog(
-                //             context: context,
-                //             builder: (context) => AlertDialog(
-                //               title: Text('حذف المنتج'),
-                //               content: Text(
-                //                   'هل أنت متأكد من رغبتك بحذف هذا المنتج ؟'),
-                //               actions: [
-                //                 TextButton(
-                //                   child: Text('إلغاء'),
-                //                   onPressed: () {
-                //                     Navigator.pop(context);
-                //                     Navigator.pop(context);
-                //                   }
-                //                 ),
-                //                 TextButton(
-                //                   child: Text('حذف'),
-                //                   onPressed: () {
-                //                     widget.onDelete(widget.product!);
-                //                     Navigator.pop(context);
-                //                   },
-                //                 ),
-                //               ],
-                //             ),
-                //           );
-                //         },
-                //         style: ElevatedButton.styleFrom(
-                //           primary: Colors.red,
-                //         ),
-                //         child: Text('حذف'),
-                //       ),
-                //     SizedBox(width: 16.w),
-                //     ElevatedButton(
-                //       onPressed: () {
-                //         if (_formKey.currentState!.validate()) {
-                //           _formKey.currentState!.save();
-                //           widget.onSave(widget.product!);
-                //           Navigator.pop(context);
-                //         }
-                //       },
-                //       child: Text('حفظ'),
-                //     ),
-                //   ],
-                // ),
               ],
             ),
           ),

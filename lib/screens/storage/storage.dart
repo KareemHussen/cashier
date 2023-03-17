@@ -35,15 +35,12 @@ class Storage extends StatelessWidget {
     //     name: 'هوهوز طماطم', quantity: 10, buyPrice: 100, sellPrice: 150, id: 13),
     // Product(
     //     name: 'هوهوز طماطم', quantity: 10, buyPrice: 100, sellPrice: 150, id: 12),
-
   ];
 
 
 
   @override
   Widget build(BuildContext context) {
-
-
     SQLHelper.getproducts().then((value) {
       // notes = [];
       for (Map<String, dynamic> pro in value) {
