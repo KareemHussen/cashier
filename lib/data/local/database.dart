@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:cashier/data/model/Product.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
@@ -46,8 +47,10 @@ class SQLHelper {
       id INTEGER PRIMARY KEY,
       price INTEGER NOT NULL,
       products TEXT NOT NULL,
-      time INTEGER NOT NULL,
-      gain INTEGER NOT NULL
+      timestamp INTEGER NOT NULL,
+      gain INTEGER NOT NULL,
+      date TEXT NOT NULL,
+      hour TEXT NOT NULL
       );
   ''');
     debugPrint("table Created");
@@ -117,11 +120,23 @@ class SQLHelper {
   static Future<int> addInvoice(double price, List<Product> products , double gain) async {
     final db = await SQLHelper.initDb(); //open database
     final json = jsonEncode(products);
+
+    var currentTime = DateTime.now().millisecondsSinceEpoch;
+
+    var dt = DateTime.fromMillisecondsSinceEpoch(currentTime);
+
+    var d12 = DateFormat('MM/dd/yyyy, hh:mm:ss a').format(dt);
+
+    var date = d12.substring(0 , 10);
+    var hour = d12.substring(12 , 23);
+
     final data = {
-      'price': price.toInt(),
+      'price': price as int,
       'products': json,
-      'time': DateTime.now().millisecondsSinceEpoch,
-      'gain' : gain.toInt()
+      'time': currentTime,
+      'gain' : gain,
+      'date' : date,
+      'hour' : hour
     }; //create data in map
 
     final id = await db.insert('invoices', data); //insert
@@ -131,7 +146,7 @@ class SQLHelper {
 
   static Future<List<Map<String, dynamic>>> getInvoices() async {
     final db = await SQLHelper.initDb();
-    return db.query('invoices', orderBy: "id");
+    return db.query('invoices', orderBy: "time DESC");
   }
 
   //get invoice by id
@@ -142,8 +157,10 @@ class SQLHelper {
 
   static Future<List<Map<String, dynamic>>> getInvoicesByTime(int startTimestamp, int endTimestamp) async {
     final db = await SQLHelper.initDb();
-    List<Map<String, dynamic>> list = await db.rawQuery('SELECT * FROM invoices WHERE time BETWEEN ? AND ?', [startTimestamp, endTimestamp]);
-    return list;
+    List<Map<String, dynamic>> list = await db.rawQuery(
+      'SELECT * FROM invoices WHERE time BETWEEN ? AND ? ORDER BY time DESC',
+      [startTimestamp, endTimestamp],
+    );    return list;
   }
 
   //get invoice by time

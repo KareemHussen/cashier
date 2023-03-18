@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:cashier/screens/Invoice/BuyProducts.dart';
+import 'package:cashier/screens/gain/gain.dart';
 import 'package:cashier/screens/shortfalls/shortfalls.dart';
 import 'package:cashier/screens/storage/storage.dart';
 import 'package:cashier/screens/storage/storage_cubit.dart';
@@ -176,10 +177,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                 primary: Colors.black38,
                               ),
                               onPressed: () {
-                                // Navigator.push(
-                                //     context,
-                                //     MaterialPageRoute(
-                                //         builder: (context) => InvoiceForm()));
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => Gain()));
                               },
                               child: const Text(
                                 'سجل الفواتير',
