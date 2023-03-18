@@ -1,23 +1,21 @@
+import 'dart:collection';
+
 import 'package:cashier/data/model/Product.dart';
 
 class Invoice {
-  int? price;
+  double? price;
   int? id;
-  List<Product> products;
-  int? time;
-  int? gain;
-  String? date;
-  String? hour;
+  List<Porduct> products;
+  late List<Product>? productsList;
+  int? timestamp;
 
   Invoice(
-      {this.id,
-      required this.products,
-      required this.price,
-        required this.time,
-        required this.gain,
-        required this.date,
-        required this.hour,
-      });
+      {
+        this.id,
+        this.timestamp,
+        required this.products,
+        required this.price,
+      }) : productsList = generateList(products);
 
 
   factory Invoice.fromJson(Map<String, dynamic> json) {
@@ -39,12 +37,9 @@ class Invoice {
   Map<String, dynamic> toJson() => {
     'id': id,
     'price': price,
-    'products': products.map((item) => item.toJson()).toList(),
-    'time': time,
-    'gain': gain,
-    'date': date,
-    'hour': hour,
-
+    'products': products,//products.map((item) => item.toJson()).toList(),
+    'time': timestamp,
+    'gain': price,
   };
 
 }

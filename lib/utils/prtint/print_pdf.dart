@@ -1,5 +1,6 @@
 import 'dart:collection';
 import 'package:cashier/data/model/Invoice.dart';
+import 'package:cashier/data/model/product_item.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -32,9 +33,9 @@ class PrintPdf {
     ],
     );
   }
-  static pw.Column printerList(HashMap<Product, int> p , pw.Font ttf){
-    List<Product> items = [];
-    p.forEach((key, value) {items.add(key);});
+  static pw.Column printerList(List<ProductItem> productItems , pw.Font ttf){
+    List<Product> products = [];
+    productItems.forEach(( value) {products.add(value.product);});
     return pw.Column(
       children: [
         pw.SizedBox(height: 13.h),
@@ -54,21 +55,21 @@ class PrintPdf {
                 textDirection: pw.TextDirection.rtl),
           ],
         ),
-        pw.Column(children: List.generate(items.length, (index) {
-          return printerItem(items[index], p[items[index]]??0, index, ttf);
+        pw.Column(children: List.generate(products.length, (index) {
+          return printerItem(products[index], productItems[index].quantity, index, ttf);
         }))
       ],
     );
   }
-  static Future<pw.Document> printInvoice(HashMap<Product, int> p, [String? time, double total =0]) async {
+  static Future<pw.Document> printInvoice(List<ProductItem> p, [String? time, double total =0]) async {
     final pw.Font ttf = await fontFromAssetBundle('assets/font2.ttf');
     if(time == null || time == 'null' ) {
       time = DateTime.now().toString();
     }
     final doc = pw.Document();
     if(total == 0) {
-      p.forEach((key, value) {
-        total += key.sellPrice * value;
+      p.forEach((prod) {
+        total += prod.product.sellPrice * prod.quantity;
       });
     }
     doc.addPage(pw.Page(
