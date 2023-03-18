@@ -15,26 +15,25 @@ class Storage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    products = StorageCubit
+        .get(context)
+        .products;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Center(child: Text(title!)),
-      ),
-
-      body: BlocConsumer<StorageCubit, StorageState>(
-        listener: (context, state) {
-        },
-        builder: (context, state) {
-        products = StorageCubit.get(context).products;
-          return ProductList(
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: Scaffold(
+          appBar: AppBar(
+            title: Center(child: Text(title! , style: TextStyle(fontFamily: 'arab'),)),
+          ),
+          body: ProductList(
               products: products,
               title: null,
               subtitle: null,
               admin: true
-          );
-        },
+          )
+
+
       ),
     );
   }
-
 }

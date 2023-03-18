@@ -1,9 +1,9 @@
 import 'package:cashier/data/local/database.dart';
-import 'package:cashier/screens/gain/gain_cubit.dart';
 import 'package:cashier/screens/home/home.dart';
 import 'package:cashier/screens/storage/storage.dart';
 import 'package:cashier/screens/storage/storage_cubit.dart';
 import 'package:cashier/utils/bloc_observer/bloc_observer.dart';
+import 'package:cashier/Invoice/invoice_cubit.dart';
 import 'package:cashier/utils/prtint/print_pdf.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,7 +17,7 @@ Future<void> main() async {
   runApp(MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => StorageCubit()..getProducts()),
-        BlocProvider(create: (context) => GainCubit()..getInvoices()),
+        BlocProvider(create: (context) => InvoiceCubit()..getInvoice()),
 
       ],
       child: MaterialApp(
@@ -46,13 +46,14 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+debugShowMaterialGrid: false,
+      debugShowCheckedModeBanner: false,
+      title: 'أولاد مبروك',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.blueGrey,
       ),
       home: const HomeScreen(),
     );

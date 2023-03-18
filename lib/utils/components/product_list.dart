@@ -57,8 +57,9 @@ class _ProductListState extends State<ProductList> {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16.w),
                 child: TextField(
+                  style: TextStyle(fontFamily: 'arab'),
                   decoration: InputDecoration(
-                    contentPadding: EdgeInsets.fromLTRB(0, 0, 820.w, 0),
+                    contentPadding: EdgeInsets.fromLTRB(0, 0, 900.w, 0),
                     hintText: 'البحث عن منتج',
                   ),
                   onChanged: (value) {
@@ -87,7 +88,9 @@ class _ProductListState extends State<ProductList> {
                             child: Text(
                               arabic[commonFactors.indexOf(factor)],
                               style: TextStyle(
-                                  fontSize: 28.sp, fontWeight: FontWeight.bold),
+                                  fontSize: 28.sp,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: 'arab'),
                             ),
                           )
                         : Expanded(
@@ -95,7 +98,7 @@ class _ProductListState extends State<ProductList> {
                             child: Text(
                               arabic[commonFactors.indexOf(factor)],
                               style: TextStyle(
-                                  fontSize: 28.sp, fontWeight: FontWeight.bold),
+                                  fontSize: 28.sp, fontWeight: FontWeight.bold, fontFamily: 'arab'),
                             ),
                           ),
                   SizedBox(width: 130)
@@ -112,9 +115,9 @@ class _ProductListState extends State<ProductList> {
                           "لا يوجد شئ للعرض",
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            fontSize: 40.sp,
-                            fontWeight: FontWeight.bold,
-                          ),
+                              fontSize: 40.sp,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'arab'),
                         ),
                       ],
                     ),
@@ -154,8 +157,8 @@ class _ProductListState extends State<ProductList> {
                                                     .toString(),
                                                 style: TextStyle(
                                                     fontSize: 28.sp,
-                                                    fontWeight:
-                                                        FontWeight.bold),
+                                                    fontWeight: FontWeight.bold,
+                                                    fontFamily: 'arab'),
                                               ),
                                             )
                                           : Expanded(
@@ -167,8 +170,8 @@ class _ProductListState extends State<ProductList> {
                                                     .toString(),
                                                 style: TextStyle(
                                                     fontSize: 28.sp,
-                                                    fontWeight:
-                                                        FontWeight.bold),
+                                                    fontWeight: FontWeight.bold,
+                                                    fontFamily: 'arab'),
                                               ),
                                             ),
                                     widget.admin!
@@ -177,7 +180,11 @@ class _ProductListState extends State<ProductList> {
                                                 MainAxisAlignment.end,
                                             children: [
                                               ElevatedButton(
-                                                child: Text('تعديل'),
+                                                child: Text(
+                                                  'تعديل',
+                                                  style: TextStyle(
+                                                      fontFamily: 'arab'),
+                                                ),
                                                 onPressed: () {
                                                   _editProduct(product.id!);
                                                 },
@@ -216,7 +223,10 @@ class _ProductListState extends State<ProductList> {
                 ? Center(
                     child: ElevatedButton(
                       onPressed: _addProduct,
-                      child: Text('إضافة منتج جديد'),
+                      child: Text(
+                        'إضافة منتج جديد',
+                        style: TextStyle(fontFamily: 'arab'),
+                      ),
                     ),
                   )
                 : SizedBox(),

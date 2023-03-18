@@ -60,11 +60,13 @@ class PrintPdf {
       ],
     );
   }
-  static Future<pw.Document> printInvoice(HashMap<Product, int> p, [String? time ,double total =-1]) async {
+  static Future<pw.Document> printInvoice(HashMap<Product, int> p, [String? time, double total =0]) async {
     final pw.Font ttf = await fontFromAssetBundle('assets/font2.ttf');
+    if(time == null || time == 'null' ) {
+      time = DateTime.now().toString();
+    }
     final doc = pw.Document();
-    if(total == -1) {
-      total = 0;
+    if(total == 0) {
       p.forEach((key, value) {
         total += key.sellPrice * value;
       });
@@ -76,7 +78,7 @@ class PrintPdf {
             pw.Center(child: pw.Text( 'اولاد مبروك'
                 , style: pw.TextStyle(font: ttf, fontSize: 30),
                 textDirection: pw.TextDirection.rtl)),
-            pw.Center(child: pw.Text( ' التاريخ و الوقت ${time ?? DateTime.now().toString()}'
+            pw.Center(child: pw.Text( ' التاريخ و الوقت $time '
                 , style: pw.TextStyle(font: ttf, fontSize: 12),
                 textDirection: pw.TextDirection.rtl)),
             printerList(p, ttf),

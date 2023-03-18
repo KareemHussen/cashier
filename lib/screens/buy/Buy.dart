@@ -14,7 +14,7 @@ class Buy extends StatefulWidget {
 class _BuyState extends State<Buy> {
 
 
-  List<Product> _items = [
+  final List<Product> _items = [
     Product(
         name: 'كرتونه بيض احمر',
         quantity: 1,
@@ -65,7 +65,7 @@ class _BuyState extends State<Buy> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(
+              SizedBox(
                 width: 900.w,
                 height: 900.h,
                 child: ProductList(
@@ -74,7 +74,7 @@ class _BuyState extends State<Buy> {
                 ),
               ),
 
-              Container(
+              SizedBox(
                 width: 900.w,
                 height: 900.h,
                 child: ProductList(

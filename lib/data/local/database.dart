@@ -15,7 +15,7 @@ class SQLHelper {
     final path = join(directory, 'cashier.db');
     DatabaseFactory databaseFactory = databaseFactoryFfi;
     if (kDebugMode) {
-      print(path + " ggggggggggggggggggggg");
+      print("$path ggggggggggggggggggggg");
     }
     return await databaseFactory.openDatabase(
       path,
