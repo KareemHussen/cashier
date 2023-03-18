@@ -47,7 +47,7 @@ class SQLHelper {
       id INTEGER PRIMARY KEY,
       price INTEGER NOT NULL,
       products TEXT NOT NULL,
-      time INTEGER NOT NULL,
+      timestamp INTEGER NOT NULL,
       gain INTEGER NOT NULL,
       date TEXT NOT NULL,
       hour TEXT NOT NULL

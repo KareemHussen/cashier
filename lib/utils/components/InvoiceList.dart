@@ -231,6 +231,7 @@ class _InvoiceListState extends State<InvoiceList> {
                                 'الكل',
                                 style: TextStyle(
                                   fontSize: 18.sp,
+                                  fontFamily: 'arab'
                                 ),
                               ),
                             ),
@@ -247,6 +248,7 @@ class _InvoiceListState extends State<InvoiceList> {
                         "الارباح الكليه",
                         style: TextStyle(
                           fontSize: 40.sp,
+                          fontFamily: 'arab'
                         ),
                       ),
                       SizedBox(
@@ -255,6 +257,7 @@ class _InvoiceListState extends State<InvoiceList> {
                       Text(
                         GainCubit.get(context).totalFilterGain.toString(),
                         style: TextStyle(
+                            fontFamily: 'arab',
                             fontSize: 40, fontWeight: FontWeight.bold),
                       ),
                     ],
@@ -269,6 +272,7 @@ class _InvoiceListState extends State<InvoiceList> {
                           child: Text(
                             arabic[commonFactors.indexOf(factor)],
                             style: TextStyle(
+                                fontFamily: 'arab',
                                 fontSize: 28.sp, fontWeight: FontWeight.bold),
                           ),
                         ),
@@ -308,6 +312,7 @@ class _InvoiceListState extends State<InvoiceList> {
                                         child: Text(
                                           invoice.toJson()[factor].toString(),
                                           style: TextStyle(
+                                            fontFamily: 'arab',
                                               fontSize: 28.sp,
                                               fontWeight: FontWeight.bold),
                                         ),
@@ -316,7 +321,7 @@ class _InvoiceListState extends State<InvoiceList> {
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
                                         ElevatedButton(
-                                          child: Text('اطلاع'),
+                                          child: Text('اطلاع' , style: TextStyle(fontFamily: 'arab')),
                                           onPressed: () {
                                             showDialog(
                                                 context: context,
@@ -330,6 +335,7 @@ class _InvoiceListState extends State<InvoiceList> {
                                                           'منتجات الفاتوره',
                                                           style: TextStyle(
                                                               fontSize: 30.sp,
+                                                              fontFamily: 'arab',
                                                               fontWeight:
                                                                   FontWeight
                                                                       .bold),
@@ -338,7 +344,7 @@ class _InvoiceListState extends State<InvoiceList> {
                                                         width: double.maxFinite,
                                                         child: ProductList(
                                                           products:
-                                                              invoice.products,
+                                                              invoice.productsList!,
                                                           admin: false,
                                                         )),
                                                   );
@@ -347,7 +353,7 @@ class _InvoiceListState extends State<InvoiceList> {
                                         ),
                                         SizedBox(width: 8.w),
                                         ElevatedButton(
-                                          child: Text('حذف'),
+                                          child: Text('حذف', style: TextStyle(fontFamily: 'arab')),
                                           onPressed: () {
                                             _deleteProduct(invoice.id!);
                                           },
@@ -385,18 +391,18 @@ class _InvoiceListState extends State<InvoiceList> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('حذف المنتج'),
-          content: Text('هل تريد حذف هذا المنتج؟'),
+          title: Text('حذف المنتج' , style: TextStyle(fontFamily: 'arab')),
+          content: Text('هل تريد حذف هذا المنتج؟' , style: TextStyle(fontFamily: 'arab')),
           actions: <Widget>[
             TextButton(
-              child: Text('إلغاء'),
+              child: Text('إلغاء', style: TextStyle(fontFamily: 'arab')),
               onPressed: () {
                 SQLHelper.deleteInvoice(invoicetId);
                 Navigator.pop(context);
               },
             ),
             TextButton(
-              child: Text('حذف'),
+              child: Text('حذف' , style: TextStyle(fontFamily: 'arab'),),
               onPressed: () {
                 setState(() {
                   SQLHelper.deleteInvoice(invoicetId);

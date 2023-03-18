@@ -47,7 +47,9 @@ class PrintPdf {
   static pw.Column printerList(List<ProductItem> productItems, pw.Font ttf) {
     List<Product> products = [];
     productItems.forEach((value) {
-      products.add(value.product);
+
+      //TODO
+      products.add(value.product as Product);
     });
     return pw.Column(
       children: [
@@ -128,7 +130,8 @@ class PrintPdf {
     List<Product> list = [];
     for (ProductItem product in v.products) {
       gain += product.product.sellPrice - product.product.buyPrice;
-      list.add(product.product);
+      //TODO
+      list.add(product.product as Product);
       await SQLHelper.updateProduct(
           product.product.id!,
           product.product.name,
@@ -136,7 +139,9 @@ class PrintPdf {
           product.product.buyPrice,
           product.product.sellPrice);
     }
-    await SQLHelper.addInvoice(v.price!, list, gain);
+
+    //TODO
+    // await SQLHelper.addInvoice(v.price!, list, gain);
 
     StorageCubit.get(context).getProducts();
     var doc =

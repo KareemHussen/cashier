@@ -1,4 +1,5 @@
 import 'package:cashier/data/local/database.dart';
+import 'package:cashier/screens/gain/gain_cubit.dart';
 import 'package:cashier/screens/home/home.dart';
 import 'package:cashier/screens/storage/storage_cubit.dart';
 import 'package:cashier/utils/bloc_observer/bloc_observer.dart';
@@ -15,6 +16,7 @@ Future<void> main() async {
   runApp(MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => StorageCubit()..getProducts()),
+        BlocProvider(create: (context) => GainCubit()..getInvoices()),
 
       ],
       child: MaterialApp(

@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:cashier/data/local/database.dart';
 import 'package:cashier/data/model/Invoice.dart';
 import 'package:cashier/data/model/Product.dart';
+import 'package:cashier/data/model/product_item.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
 
@@ -27,21 +28,17 @@ Future getInvoices() async {
       List<dynamic> invoiceList = jsonDecode(invoice['products']);
       List<Product> products = invoiceList.map((item) => Product.fromJson(item)).toList();
 
-      Invoice i = Invoice(
-          id: invoice['id'],
-          price: invoice['price'],
-          products: products,
-          time: invoice['time'],
-          gain: invoice['gain'],
-          date: invoice['date'],
-          hour: invoice['hour']
-      );
+      List<ProductItem> productsItem = [];
+
+      for(Product product in products){
+        productsItem.add(ProductItem(product: product, quantity: product.quantity));
+      }
 
       invoices.add(Invoice(
           id: invoice['id'],
           price: invoice['price'],
-          products: products,
-          time: invoice['time'],
+          products: productsItem,
+          timestamp: invoice['time'],
           gain: invoice['gain'],
           date: invoice['date'],
           hour: invoice['hour']
@@ -67,11 +64,17 @@ Future getInvoicesByTime(int startTimestamp , int endTimestamp) async{
         List<dynamic> invoiceList = jsonDecode(invoice['products']);
         List<Product> products = invoiceList.map((item) => Product.fromJson(item)).toList();
 
+        List<ProductItem> productsItem = [];
+
+        for(Product product in products){
+          productsItem.add(ProductItem(product: product, quantity: product.quantity));
+        }
+
         filteredInvoices.add(Invoice(
             id: invoice['id'],
             price: invoice['price'],
-            products: products,
-            time: invoice['time'],
+            products: productsItem,
+            timestamp: invoice['time'],
             gain: invoice['gain'],
             date: invoice['date'],
             hour: invoice['hour']

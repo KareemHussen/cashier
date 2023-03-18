@@ -5,7 +5,7 @@ import 'package:cashier/data/model/Product.dart';
 import 'package:cashier/data/model/product_item.dart';
 import 'package:cashier/screens/storage/storage_cubit.dart';
 import 'package:cashier/utils/components/product_list_item.dart';
-import 'package:cashier/utils/prtint/print_pdf.dart';
+import 'package:cashier/utils/print/print_pdf.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -124,7 +124,8 @@ class _ProductSelectionScreenState extends State<ProductSelectionScreen> {
                           for(ProductItem product in productItemList){
                             total+= product.product.sellPrice * product.quantity;
                           }
-                          PrintPdf.checkOut(Invoice(products: productItemList, price: total) , context);
+                          //TODO
+                          PrintPdf.checkOut(Invoice(products: productItemList, price: total, gain: 0, date: '', hour: '') , context);
                         },
                         child: Container(
                             child: const Text(
