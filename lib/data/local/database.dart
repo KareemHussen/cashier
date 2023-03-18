@@ -114,14 +114,14 @@ class SQLHelper {
   //////////////////////////////////////////////////////////////////////////////
 
 //add
-  static Future<int> addInvoice(int price, List<Product> products , int gain) async {
+  static Future<int> addInvoice(double price, List<Product> products , double gain) async {
     final db = await SQLHelper.initDb(); //open database
     final json = jsonEncode(products);
     final data = {
-      'price': price,
+      'price': price as int,
       'products': json,
       'time': DateTime.now().millisecondsSinceEpoch,
-      'gain' : gain
+      'gain' : gain as int
     }; //create data in map
 
     final id = await db.insert('invoices', data); //insert

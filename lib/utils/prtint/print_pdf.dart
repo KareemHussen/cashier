@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'package:cashier/data/local/database.dart';
 import 'package:cashier/data/model/Invoice.dart';
 import 'package:cashier/data/model/product_item.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -96,6 +97,13 @@ class PrintPdf {
     return doc;
   }
   static Future<void> checkOut(Invoice v) async {
+    double gain = 0.0;
+    List<Product> list = [];
+    for(ProductItem product in v.products){
+      gain += product.product.sellPrice -  product.product.buyPrice;
+      list.add(product.product);
+    }
+    SQLHelper.addInvoice(v.price! , list ,gain );
     var doc = await printInvoice(v.products,
         v.timestamp.toString(),v.price?? -1 );
     await Printing.layoutPdf(
