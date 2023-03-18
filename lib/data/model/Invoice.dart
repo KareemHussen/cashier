@@ -1,11 +1,11 @@
-import 'dart:collection';
 
 import 'package:cashier/data/model/Product.dart';
+import 'package:cashier/data/model/product_item.dart';
 
 class Invoice {
   double? price;
   int? id;
-  HashMap<Product, int> products;
+  List<ProductItem> products;
   late List<Product>? productsList;
   int? timestamp;
 
@@ -18,9 +18,9 @@ class Invoice {
       }) : productsList = generateList(products);
 
 
-  static List<Product> generateList(HashMap<Product, int> m){
+  static List<Product> generateList(List<ProductItem> m){
     List<Product> products = [];
-    m.forEach((key, value) {products.add(key);});
+    m.forEach((key) {products.add(key.product);});
     return products;
   }
 

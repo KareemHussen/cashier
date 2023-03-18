@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:cashier/Invoice/BuyProducts.dart';
+import 'package:cashier/screens/Invoice/BuyProducts.dart';
 import 'package:cashier/screens/shortfalls/shortfalls.dart';
 import 'package:cashier/screens/storage/storage.dart';
 import 'package:cashier/screens/storage/storage_cubit.dart';
@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../Invoice/invoice_form.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -160,7 +159,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => const BuyProducts()));
+                                        builder: (context) => ProductSelectionScreen()));
                               },
                               child: const Text(
                                 'إصدار فاتورة',
@@ -177,13 +176,13 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                 primary: Colors.black38,
                               ),
                               onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => InvoiceForm()));
+                                // Navigator.push(
+                                //     context,
+                                //     MaterialPageRoute(
+                                //         builder: (context) => InvoiceForm()));
                               },
                               child: const Text(
-                                'الإطلاع علي الفواتير',
+                                'سجل الفواتير',
                                 style: TextStyle(fontFamily: 'arab'),
                               ),
                             ),
