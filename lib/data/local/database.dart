@@ -117,7 +117,7 @@ class SQLHelper {
   //////////////////////////////////////////////////////////////////////////////
 
 //add
-  static Future<int> addInvoice(int price, List<Product> products , int gain ) async {
+  static Future<int> addInvoice(int price, List<Product> products , int gain) async {
     final db = await SQLHelper.initDb(); //open database
     final json = jsonEncode(products);
 
