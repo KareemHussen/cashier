@@ -18,12 +18,15 @@ class _ProductSelectionScreenState extends State<ProductSelectionScreen> {
   final List<ProductItem> _selectedProducts = [];
   List<Product> _products = [];
   List<ProductItem> productItemList = [];
+  double total = 0.0;
 
   void _onProductSelect(ProductItem product, bool selected) {
     setState(() {
       if (selected) {
         if (!_selectedProducts.contains(product)) {
           _selectedProducts.add(product);
+
+          total += product.product.sellPrice * product.quantity;
         }
       } else {
         _selectedProducts.remove(product);
@@ -113,7 +116,8 @@ class _ProductSelectionScreenState extends State<ProductSelectionScreen> {
                           title: Text(product.product.name),
                           subtitle: Text('سعر البيع: ' +
                               (product.product.sellPrice * product.quantity)
-                                  .toStringAsFixed(2) + 'ج.م'+
+                                  .toStringAsFixed(2) +
+                              'ج.م' +
                               ' \n الكمية: ' +
                               product.quantity.toString()),
                         );
@@ -122,22 +126,27 @@ class _ProductSelectionScreenState extends State<ProductSelectionScreen> {
                   ),
                   Container(
                     margin: EdgeInsets.all(50.w),
-                    child: ElevatedButton(
-                        onPressed: () {
-                          double total = 0.0;
-                          for (ProductItem product in productItemList) {
-                            total +=
-                                product.product.sellPrice * product.quantity;
-                          }
-                          PrintPdf.checkOut(
-                              Invoice(products: productItemList, price: total),
-                              context);
-                        },
-                        child: Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        ElevatedButton(
+                            onPressed: () {
+                              PrintPdf.checkOut(
+                                  Invoice(
+                                      products: productItemList, price: total),
+                                  context);
+                            },
                             child: const Text(
-                          'حفظ وطباعة',
-                          style: TextStyle(fontFamily: 'arab'),
-                        ))),
+                              'حفظ وطباعة',
+                              style: TextStyle(fontFamily: 'arab'),
+                            )),
+                         Text(
+                          'إجمالي الفاتورة: ' + total.toString() + '.LE',
+                          style: TextStyle(
+                              fontFamily: 'arab', fontWeight: FontWeight.bold, fontSize: 24.sp),
+                        ),
+                      ],
+                    ),
                   )
                 ],
               ),
