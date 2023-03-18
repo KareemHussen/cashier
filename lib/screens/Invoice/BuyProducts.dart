@@ -5,7 +5,7 @@ import 'package:cashier/data/model/Product.dart';
 import 'package:cashier/data/model/product_item.dart';
 import 'package:cashier/screens/storage/storage_cubit.dart';
 import 'package:cashier/utils/components/product_list_item.dart';
-import 'package:cashier/utils/print/print_pdf.dart';
+import 'package:cashier/utils/prtint/print_pdf.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -44,7 +44,8 @@ class _ProductSelectionScreenState extends State<ProductSelectionScreen> {
     _products.sort((a, b) => a.name.compareTo(b.name));
 
     for (Product item in _products) {
-      productItemList.add(ProductItem(product: item, quantity: 0, selected: false));
+      productItemList
+          .add(ProductItem(product: item, quantity: 0, selected: false));
     }
   }
 
@@ -110,8 +111,11 @@ class _ProductSelectionScreenState extends State<ProductSelectionScreen> {
                         final product = _selectedProducts[index];
                         return ListTile(
                           title: Text(product.product.name),
-                          subtitle: Text(
-                              'سعر البيع: \$${(product.product.sellPrice * product.quantity).toStringAsFixed(2)} \n الكمية: ${product.quantity}'),
+                          subtitle: Text('سعر البيع: ' +
+                              (product.product.sellPrice * product.quantity)
+                                  .toStringAsFixed(2) + 'ج.م'+
+                              ' \n الكمية: ' +
+                              product.quantity.toString()),
                         );
                       },
                     ),
@@ -121,11 +125,13 @@ class _ProductSelectionScreenState extends State<ProductSelectionScreen> {
                     child: ElevatedButton(
                         onPressed: () {
                           double total = 0.0;
-                          for(ProductItem product in productItemList){
-                            total+= product.product.sellPrice * product.quantity;
+                          for (ProductItem product in productItemList) {
+                            total +=
+                                product.product.sellPrice * product.quantity;
                           }
-                          //TODO
-                          PrintPdf.checkOut(Invoice(products: productItemList, price: total, gain: 0, date: '', hour: '') , context);
+                          PrintPdf.checkOut(
+                              Invoice(products: productItemList, price: total),
+                              context);
                         },
                         child: Container(
                             child: const Text(
