@@ -57,13 +57,13 @@ class _InvoiceListState extends State<InvoiceList> {
               GainCubit.get(context).totalFilterGain = 0;
               GainCubit.get(context).filteredInvoices.forEach((element) {
                 GainCubit.get(context).totalFilterGain =
-                    GainCubit.get(context).totalFilterGain + element.gain!;
+                    (GainCubit.get(context).totalFilterGain + element.gain!) as int;
                 print(element.gain);
               });
             } else if (state is GainReset) {
               GainCubit.get(context).filteredInvoices.forEach((element) {
                 GainCubit.get(context).totalFilterGain =
-                    GainCubit.get(context).totalFilterGain + element.gain!;
+                    (GainCubit.get(context).totalFilterGain + element.gain!) as int;
               });
             }
           },

@@ -5,9 +5,10 @@ import 'package:cashier/data/model/Product.dart';
 import 'package:cashier/data/model/product_item.dart';
 import 'package:cashier/screens/storage/storage_cubit.dart';
 import 'package:cashier/utils/components/product_list_item.dart';
-import 'package:cashier/utils/prtint/print_pdf.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import '../../utils/print/print_pdf.dart';
 
 class ProductSelectionScreen extends StatefulWidget {
   @override
@@ -19,14 +20,16 @@ class _ProductSelectionScreenState extends State<ProductSelectionScreen> {
   List<Product> _products = [];
   List<ProductItem> productItemList = [];
   double total = 0.0;
+  double totalSell = 0.0;
 
   void _onProductSelect(ProductItem product, bool selected) {
     setState(() {
       if (selected) {
         if (!_selectedProducts.contains(product)) {
           _selectedProducts.add(product);
-
-          total += product.product.sellPrice * product.quantity;
+          var sell = product.product.sellPrice * product.quantity;
+          total += sell;
+          totalSell+= (sell -(product.product.sellPrice * product.quantity) );
         }
       } else {
         _selectedProducts.remove(product);
@@ -114,12 +117,8 @@ class _ProductSelectionScreenState extends State<ProductSelectionScreen> {
                         final product = _selectedProducts[index];
                         return ListTile(
                           title: Text(product.product.name),
-                          subtitle: Text('سعر البيع: ' +
-                              (product.product.sellPrice * product.quantity)
-                                  .toStringAsFixed(2) +
-                              'ج.م' +
-                              ' \n الكمية: ' +
-                              product.quantity.toString()),
+                          subtitle: Text('سعر البيع: ${(product.product.sellPrice * product.quantity)
+                                  .toStringAsFixed(2)}ج.م \n الكمية: ${product.quantity}'),
                         );
                       },
                     ),
@@ -133,7 +132,10 @@ class _ProductSelectionScreenState extends State<ProductSelectionScreen> {
                             onPressed: () {
                               PrintPdf.checkOut(
                                   Invoice(
-                                      products: productItemList, price: total),
+                                      products: productItemList, price: total,
+                                      gain: totalSell, timestamp: DateTime.now().millisecond,
+                                      hour: DateTime.now().hour.toString(),
+                                      date: DateTime.now().toString()),
                                   context);
                             },
                             child: const Text(
@@ -141,7 +143,7 @@ class _ProductSelectionScreenState extends State<ProductSelectionScreen> {
                               style: TextStyle(fontFamily: 'arab'),
                             )),
                          Text(
-                          'إجمالي الفاتورة: ' + total.toString() + '.LE',
+                          'إجمالي الفاتورة: $total.LE',
                           style: TextStyle(
                               fontFamily: 'arab', fontWeight: FontWeight.bold, fontSize: 24.sp),
                         ),

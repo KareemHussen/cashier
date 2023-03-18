@@ -81,7 +81,7 @@ class Invoice {
   List<ProductItem> products;
   late List<Product>? productsList;
   int? timestamp;
-  int? gain;
+  double? gain;
   String? date;
   String? hour;
 
@@ -111,7 +111,7 @@ class Invoice {
       products: json['products'],
       price: json['price'] as double?,
       timestamp: json['time'] as int?,
-      gain: json['gain'] as int?,
+      gain: json['gain'] as double?,
       date: json['date'] as String,
       hour: json['hour'] as String,
       // productList: json['P'],
