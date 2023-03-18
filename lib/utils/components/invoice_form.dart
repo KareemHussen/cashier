@@ -45,14 +45,14 @@ class _InvoiceFormState extends State<InvoiceForm> {
     super.initState();
     // Set the initial values for the fields based on the product
     widget.cartItems;
-    widget.invoice ?? Invoice(products: widget.cartItems, price: 0);
+    // widget.invoice ?? Invoice(products: widget.cartItems, price: 0, time: null, gain: null, date: '', hour: '');
   }
 
   @override
   Widget build(BuildContext context) {
     bool flag = widget.invoice == null;
     if (flag) {
-      widget.invoice = Invoice(products: widget.cartItems, price: 0);
+      // widget.invoice = Invoice(products: widget.cartItems, price: 0);
     }
     widget.products = StorageCubit.get(context).products;
     var items = widget.items;
@@ -77,10 +77,10 @@ class _InvoiceFormState extends State<InvoiceForm> {
                         items.add(key);
                         total+=key.sellPrice * value;
                       });
-                      Invoice invoice = Invoice(products: widget.cartItems,
-                          price: total , timestamp: DateTime.now().millisecondsSinceEpoch);
-                      // Page
-                      PrintPdf.checkOut(invoice);
+                      // Invoice invoice = Invoice(products: widget.cartItems,
+                      //     price: total , timestamp: DateTime.now().millisecondsSinceEpoch);
+                      // // Page
+                      // PrintPdf.checkOut(invoice);
                     },
                     child: const Text('حفظ و طباعة الفاتورة')),
                 DropdownSearch<Product>.multiSelection(

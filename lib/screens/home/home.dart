@@ -5,6 +5,7 @@ import 'package:cashier/data/local/database.dart';
 import 'package:cashier/data/model/Invoice.dart';
 import 'package:cashier/data/model/Product.dart';
 import 'package:cashier/screens/buy/Buy.dart';
+import 'package:cashier/screens/gain/gain.dart';
 import 'package:cashier/screens/shortfalls/shortfalls.dart';
 import 'package:cashier/screens/storage/storage.dart';
 import 'package:cashier/utils/components/invoice_form.dart';
@@ -61,10 +62,22 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Shorfalls()),
-                      );
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(builder: (context) => Shorfalls()),
+                      // );
+
+                      List<Product> list = [
+                        Product(id: 3, name: "name", quantity: 20, buyPrice: 30, sellPrice: 50),
+                        Product(id: 3, name: "name", quantity: 20, buyPrice: 30, sellPrice: 50),
+                        Product(id: 3, name: "name", quantity: 20, buyPrice: 30, sellPrice: 50),
+                        Product(id: 3, name: "name", quantity: 20, buyPrice: 30, sellPrice: 50),
+                        Product(id: 3, name: "name", quantity: 20, buyPrice: 30, sellPrice: 50),
+                      ];
+
+                      SQLHelper.addInvoice(1500, list, 100);
+
+
                     },
                     style: ElevatedButton.styleFrom(
                         primary: Colors.purple,
@@ -75,6 +88,25 @@ class _HomeScreenState extends State<HomeScreen> {
 
                     child: const Text('الجرد'),
                   ),
+
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Gain()),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                        primary: Colors.purple,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 60, vertical: 25),
+                        textStyle: const TextStyle(
+                            fontSize: 30, fontWeight: FontWeight.bold)),
+
+                    child: const Text('الفواتير'),
+                  ),
+
+
                   ElevatedButton(
                     onPressed: () {
                       Navigator.push(

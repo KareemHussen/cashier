@@ -93,10 +93,10 @@ class PrintPdf {
     return doc;
   }
   static Future<void> checkOut(Invoice v) async {
-    var doc = await printInvoice(v.products,
-        v.timestamp.toString(),v.price?? -1 );
-    await Printing.layoutPdf(
-        onLayout: (PdfPageFormat format) async => doc.save());
+    // var doc = await printInvoice(v.products,
+    //     v.timestamp.toString(),v.price?? -1 );
+    // await Printing.layoutPdf(
+    //     onLayout: (PdfPageFormat format) async => doc.save());
     // save to db
   }
 
