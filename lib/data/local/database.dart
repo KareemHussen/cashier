@@ -118,10 +118,10 @@ class SQLHelper {
     final db = await SQLHelper.initDb(); //open database
     final json = jsonEncode(products);
     final data = {
-      'price': price as int,
+      'price': price.toInt(),
       'products': json,
       'time': DateTime.now().millisecondsSinceEpoch,
-      'gain' : gain as int
+      'gain' : gain.toInt()
     }; //create data in map
 
     final id = await db.insert('invoices', data); //insert
