@@ -17,7 +17,7 @@ class ProductSelectionScreen extends StatefulWidget {
 class _ProductSelectionScreenState extends State<ProductSelectionScreen> {
   final List<ProductItem> _selectedProducts = [];
   List<Product> _products = [];
-  List<ProductItem> products = [];
+  List<ProductItem> productItemList = [];
 
   void _onProductSelect(ProductItem product, bool selected) {
     setState(() {
@@ -44,7 +44,8 @@ class _ProductSelectionScreenState extends State<ProductSelectionScreen> {
     _products.sort((a, b) => a.name.compareTo(b.name));
 
     for (Product item in _products) {
-      products.add(ProductItem(product: item, quantity: 0, selected: false));
+      productItemList
+          .add(ProductItem(product: item, quantity: 0, selected: false));
     }
   }
 
@@ -74,16 +75,16 @@ class _ProductSelectionScreenState extends State<ProductSelectionScreen> {
                           TextStyle(color: Colors.black, fontFamily: 'arab')),
                   Expanded(
                     child: ListView.builder(
-                      itemCount: products.length,
+                      itemCount: productItemList.length,
                       itemBuilder: (context, index) {
                         return ProductListItem(
-                          productItem: products[index],
+                          productItem: productItemList[index],
                           onSelect: (selected) {
-                            _onProductSelect(products[index], selected);
+                            _onProductSelect(productItemList[index], selected);
                           },
                           onQuantityChanged: (quantity) =>
                               _onProductQuantityChanged(
-                                  products[index], quantity),
+                                  productItemList[index], quantity),
                         );
                       },
                     ),
@@ -110,8 +111,11 @@ class _ProductSelectionScreenState extends State<ProductSelectionScreen> {
                         final product = _selectedProducts[index];
                         return ListTile(
                           title: Text(product.product.name),
-                          subtitle: Text(
-                              'سعر البيع: \$${(product.product.sellPrice * product.quantity).toStringAsFixed(2)} \n الكمية: ${product.quantity}'),
+                          subtitle: Text('سعر البيع: ' +
+                              (product.product.sellPrice * product.quantity)
+                                  .toStringAsFixed(2) + 'ج.م'+
+                              ' \n الكمية: ' +
+                              product.quantity.toString()),
                         );
                       },
                     ),
@@ -121,10 +125,13 @@ class _ProductSelectionScreenState extends State<ProductSelectionScreen> {
                     child: ElevatedButton(
                         onPressed: () {
                           double total = 0.0;
-                          for(ProductItem product in products){
-                            total+= product.product.sellPrice * product.quantity;
+                          for (ProductItem product in productItemList) {
+                            total +=
+                                product.product.sellPrice * product.quantity;
                           }
-                          PrintPdf.checkOut(Invoice(products: products, price: total));
+                          PrintPdf.checkOut(
+                              Invoice(products: productItemList, price: total),
+                              context);
                         },
                         child: Container(
                             child: const Text(

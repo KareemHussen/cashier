@@ -26,7 +26,6 @@ class Invoice {
 
   factory Invoice.fromJson(Map<String, dynamic> json) {
     var productList = json['products'] as List<dynamic>;
-    var products = productList.map((item) => Product.fromJson(item)).toList();
 
     return Invoice(
       id: json['id'] as int?,

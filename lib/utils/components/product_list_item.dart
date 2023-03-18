@@ -51,7 +51,7 @@ class _ProductListItemState extends State<ProductListItem> {
                             TextStyle(fontSize: 24.0.sp, fontFamily: 'arab')),
                     SizedBox(width: 8.0.w),
                     SizedBox(
-                      width: 200.0.w,
+                      width: 270.0.w,
                       child: TextField(
                         controller: _controller,
                         decoration: InputDecoration(hintText: "الحد الأقصي: " + widget.productItem.product.quantity.toString()),
