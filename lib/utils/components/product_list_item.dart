@@ -1,4 +1,3 @@
-import 'package:cashier/data/model/Product.dart';
 import 'package:cashier/data/model/product_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -105,7 +104,7 @@ class _ProductListItemState extends State<ProductListItem> {
           content: Text(subtitle),
           actions: [
             TextButton(
-              child: Text('حسنا'),
+              child: const Text('حسنا'),
               onPressed: () {
                 Navigator.of(context).pop();
               },

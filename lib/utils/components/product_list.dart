@@ -57,7 +57,7 @@ class _ProductListState extends State<ProductList> {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16.w),
                 child: TextField(
-                  style: TextStyle(fontFamily: 'arab'),
+                  style: const TextStyle(fontFamily: 'arab'),
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.fromLTRB(0, 0, 900.w, 0),
                     hintText: 'البحث عن منتج',
@@ -101,7 +101,7 @@ class _ProductListState extends State<ProductList> {
                                   fontSize: 28.sp, fontWeight: FontWeight.bold, fontFamily: 'arab'),
                             ),
                           ),
-                  SizedBox(width: 130)
+                  const SizedBox(width: 130)
                 ],
               ),
             SizedBox(height: 16.h),
@@ -131,13 +131,13 @@ class _ProductListState extends State<ProductList> {
                               color: Colors.grey.withOpacity(0.1),
                               spreadRadius: 12,
                               blurRadius: 50,
-                              offset: Offset(0, 5),
+                              offset: const Offset(0, 5),
                             ),
                           ],
                         ),
                         child: ListView.builder(
                           shrinkWrap: true,
-                          physics: AlwaysScrollableScrollPhysics(),
+                          physics: const AlwaysScrollableScrollPhysics(),
                           itemCount: filteredProducts.length,
                           itemBuilder: (context, index) {
                             Product product = filteredProducts[index];
@@ -180,26 +180,29 @@ class _ProductListState extends State<ProductList> {
                                                 MainAxisAlignment.end,
                                             children: [
                                               ElevatedButton(
-                                                child: Text(
+                                                child: const Text(
                                                   'تعديل',
                                                   style: TextStyle(
                                                       fontFamily: 'arab'),
                                                 ),
                                                 onPressed: () {
-                                                  _editProduct(product.id!);
+
+                                                  setState(() {_editProduct(product.id!);});
                                                 },
                                               ),
                                               SizedBox(width: 8.w),
                                               ElevatedButton(
-                                                child: Text('حذف'),
                                                 onPressed: () {
-                                                  _deleteProduct(product.id!);
+                                                  setState(() {
+                                                    _deleteProduct(product.id!);
+                                                  });
                                                 },
                                                 style: ButtonStyle(
                                                   backgroundColor:
                                                       MaterialStateProperty.all<
                                                           Color>(Colors.red),
                                                 ),
+                                                child: const Text('حذف'),
                                               ),
                                               SizedBox(width: 20.w)
                                             ],
@@ -223,13 +226,13 @@ class _ProductListState extends State<ProductList> {
                 ? Center(
                     child: ElevatedButton(
                       onPressed: _addProduct,
-                      child: Text(
+                      child: const Text(
                         'إضافة منتج جديد',
                         style: TextStyle(fontFamily: 'arab'),
                       ),
                     ),
                   )
-                : SizedBox(),
+                : const SizedBox(),
             SizedBox(height: 25.h)
           ],
         ),
@@ -242,18 +245,18 @@ class _ProductListState extends State<ProductList> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('حذف المنتج'),
-          content: Text('هل تريد حذف هذا المنتج؟'),
+          title: const Text('حذف المنتج'),
+          content: const Text('هل تريد حذف هذا المنتج؟'),
           actions: <Widget>[
             TextButton(
-              child: Text('إلغاء'),
+              child: const Text('إلغاء'),
               onPressed: () {
                 SQLHelper.deleteProduct(productId);
                 Navigator.pop(context);
               },
             ),
             TextButton(
-              child: Text('حذف'),
+              child: const Text('حذف'),
               onPressed: () {
                 setState(() {
                   SQLHelper.deleteProduct(productId);

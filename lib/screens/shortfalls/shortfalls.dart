@@ -1,10 +1,6 @@
-import 'package:cashier/data/local/database.dart';
 import 'package:cashier/data/model/Product.dart';
 import 'package:cashier/screens/storage/storage_cubit.dart';
-import 'package:cashier/screens/storage/storage_cubit.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../utils/components/product_list.dart';
 
 class Shorfalls extends StatelessWidget {

@@ -157,7 +157,7 @@ class _ProductFormState extends State<ProductForm> {
                           Navigator.pop(context);
                         }
                       },
-                      child: Text('حفظ'),
+                      child: const Text('حفظ'),
                     ):ElevatedButton(
                       onPressed: () async{
                         if (_formKey.currentState!.validate()) {
@@ -170,7 +170,7 @@ class _ProductFormState extends State<ProductForm> {
                           Navigator.pop(context);
                         }
                       },
-                      child: Text('حفظ'),
+                      child: const Text('حفظ'),
                     ),
                   ],
                 ),

@@ -49,7 +49,7 @@ class PrintPdf {
     productItems.forEach((value) {
 
       //TODO
-      products.add(value.product as Product);
+      products.add(value.product);
     });
     return pw.Column(
       children: [
@@ -131,7 +131,7 @@ class PrintPdf {
     for (ProductItem product in v.products) {
       gain += product.product.sellPrice - product.product.buyPrice;
       //TODO
-      list.add(product.product as Product);
+      list.add(product.product);
       await SQLHelper.updateProduct(
           product.product.id!,
           product.product.name,

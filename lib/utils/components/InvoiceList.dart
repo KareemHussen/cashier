@@ -1,10 +1,6 @@
-import 'dart:async';
-import 'dart:math';
 
 import 'package:cashier/data/local/database.dart';
 import 'package:cashier/data/model/Invoice.dart';
-import 'package:cashier/data/model/Product.dart';
-import 'package:cashier/screens/gain/gain.dart';
 import 'package:cashier/screens/gain/gain_cubit.dart';
 import 'package:cashier/utils/components/product_list.dart';
 import 'package:flutter/material.dart';
@@ -256,7 +252,7 @@ class _InvoiceListState extends State<InvoiceList> {
                       ),
                       Text(
                         GainCubit.get(context).totalFilterGain.toString(),
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontFamily: 'arab',
                             fontSize: 40, fontWeight: FontWeight.bold),
                       ),
@@ -290,13 +286,13 @@ class _InvoiceListState extends State<InvoiceList> {
                               color: Colors.grey.withOpacity(0.1),
                               spreadRadius: 12,
                               blurRadius: 50,
-                              offset: Offset(0, 5),
+                              offset: const Offset(0, 5),
                             ),
                           ],
                         ),
                         child: ListView.builder(
                           shrinkWrap: true,
-                          physics: AlwaysScrollableScrollPhysics(),
+                          physics: const AlwaysScrollableScrollPhysics(),
                           itemCount:
                               GainCubit.get(context).filteredInvoices.length,
                           itemBuilder: (context, index) {
@@ -321,7 +317,7 @@ class _InvoiceListState extends State<InvoiceList> {
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
                                         ElevatedButton(
-                                          child: Text('اطلاع' , style: TextStyle(fontFamily: 'arab')),
+                                          child: const Text('اطلاع' , style: TextStyle(fontFamily: 'arab')),
                                           onPressed: () {
                                             showDialog(
                                                 context: context,
@@ -353,7 +349,6 @@ class _InvoiceListState extends State<InvoiceList> {
                                         ),
                                         SizedBox(width: 8.w),
                                         ElevatedButton(
-                                          child: Text('حذف', style: TextStyle(fontFamily: 'arab')),
                                           onPressed: () {
                                             _deleteProduct(invoice.id!);
                                           },
@@ -362,6 +357,7 @@ class _InvoiceListState extends State<InvoiceList> {
                                                 MaterialStateProperty.all<
                                                     Color>(Colors.red),
                                           ),
+                                          child: const Text('حذف', style: TextStyle(fontFamily: 'arab')),
                                         ),
                                         SizedBox(width: 20.w)
                                       ],
@@ -391,18 +387,18 @@ class _InvoiceListState extends State<InvoiceList> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('حذف المنتج' , style: TextStyle(fontFamily: 'arab')),
-          content: Text('هل تريد حذف هذا المنتج؟' , style: TextStyle(fontFamily: 'arab')),
+          title: const Text('حذف المنتج' , style: TextStyle(fontFamily: 'arab')),
+          content: const Text('هل تريد حذف هذا المنتج؟' , style: TextStyle(fontFamily: 'arab')),
           actions: <Widget>[
             TextButton(
-              child: Text('إلغاء', style: TextStyle(fontFamily: 'arab')),
+              child: const Text('إلغاء', style: TextStyle(fontFamily: 'arab')),
               onPressed: () {
                 SQLHelper.deleteInvoice(invoicetId);
                 Navigator.pop(context);
               },
             ),
             TextButton(
-              child: Text('حذف' , style: TextStyle(fontFamily: 'arab'),),
+              child: const Text('حذف' , style: TextStyle(fontFamily: 'arab'),),
               onPressed: () {
                 setState(() {
                   SQLHelper.deleteInvoice(invoicetId);
