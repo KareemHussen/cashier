@@ -14,6 +14,7 @@ class StorageCubit extends Cubit<StorageState> {
 Future getProducts() async {
   emit(StorageLoading());
   SQLHelper.getproducts().then((value) {
+    products.clear();
     for (Map<String, dynamic> pro in value) {
       products.add(Product(
           id: pro['id'],
