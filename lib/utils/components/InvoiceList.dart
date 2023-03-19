@@ -1,4 +1,3 @@
-
 import 'package:cashier/data/local/database.dart';
 import 'package:cashier/data/model/Invoice.dart';
 import 'package:cashier/screens/gain/gain_cubit.dart';
@@ -22,6 +21,7 @@ class _InvoiceListState extends State<InvoiceList> {
 
   late DateTime start;
   late DateTime end;
+  String searchQuery = '';
 
   final List<String> arabic = [
     'رقم الفاتوره',
@@ -51,13 +51,13 @@ class _InvoiceListState extends State<InvoiceList> {
           listener: (context, state) {
             if (state is GainSuccessful) {
               GainCubit.get(context).filteredInvoices.forEach((element) {
-
                 print(element.gain);
               });
             } else if (state is GainReset) {
               GainCubit.get(context).filteredInvoices.forEach((element) {
                 GainCubit.get(context).totalFilterGain =
-                    (GainCubit.get(context).totalFilterGain + element.gain!).toInt();
+                    (GainCubit.get(context).totalFilterGain + element.gain!)
+                        .toInt();
               });
             }
           },
@@ -67,6 +67,35 @@ class _InvoiceListState extends State<InvoiceList> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16.w),
+                    child: TextField(
+                      style: const TextStyle(fontFamily: 'arab'),
+                      decoration: InputDecoration(
+                        contentPadding: EdgeInsets.fromLTRB(0, 0, 900.w, 0),
+                        hintText: 'البحث عن فاتورة',
+                      ),
+                      onChanged: (value) {
+                        setState(() {
+                          searchQuery = value;
+                          GainCubit.get(context).filteredInvoices = GainCubit
+                                  .get(context)
+                              .invoices
+                              .where((product) =>
+                                  product.date
+                                      .toString()
+                                      .toLowerCase()
+                                      .contains(searchQuery.toLowerCase()) ||
+                                  product.hour
+                                      .toString()
+                                      .toLowerCase()
+                                      .contains(searchQuery.toLowerCase()))
+                              .toList();
+                        });
+                      },
+                    ),
+                  ),
+
                   SizedBox(height: 40.h),
                   Row(
                     children: [
@@ -76,7 +105,8 @@ class _InvoiceListState extends State<InvoiceList> {
                             arabic[commonFactors.indexOf(factor)],
                             style: TextStyle(
                                 fontFamily: 'arab',
-                                fontSize: 28.sp, fontWeight: FontWeight.bold),
+                                fontSize: 28.sp,
+                                fontWeight: FontWeight.bold),
                           ),
                         ),
                       SizedBox(width: 130.w)
@@ -115,7 +145,7 @@ class _InvoiceListState extends State<InvoiceList> {
                                         child: Text(
                                           invoice.toJson()[factor].toString(),
                                           style: TextStyle(
-                                            fontFamily: 'arab',
+                                              fontFamily: 'arab',
                                               fontSize: 28.sp,
                                               fontWeight: FontWeight.bold),
                                         ),
@@ -124,7 +154,9 @@ class _InvoiceListState extends State<InvoiceList> {
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
                                         ElevatedButton(
-                                          child: const Text('اطلاع' , style: TextStyle(fontFamily: 'arab')),
+                                          child: const Text('اطلاع',
+                                              style: TextStyle(
+                                                  fontFamily: 'arab')),
                                           onPressed: () {
                                             showDialog(
                                                 context: context,
@@ -138,7 +170,8 @@ class _InvoiceListState extends State<InvoiceList> {
                                                           'منتجات الفاتوره',
                                                           style: TextStyle(
                                                               fontSize: 30.sp,
-                                                              fontFamily: 'arab',
+                                                              fontFamily:
+                                                                  'arab',
                                                               fontWeight:
                                                                   FontWeight
                                                                       .bold),
@@ -146,8 +179,8 @@ class _InvoiceListState extends State<InvoiceList> {
                                                     content: Container(
                                                         width: double.maxFinite,
                                                         child: ProductList(
-                                                          products:
-                                                              invoice.productsList!,
+                                                          products: invoice
+                                                              .productsList!,
                                                           admin: false,
                                                         )),
                                                   );
@@ -164,7 +197,9 @@ class _InvoiceListState extends State<InvoiceList> {
                                                 MaterialStateProperty.all<
                                                     Color>(Colors.red),
                                           ),
-                                          child: const Text('حذف', style: TextStyle(fontFamily: 'arab')),
+                                          child: const Text('حذف',
+                                              style: TextStyle(
+                                                  fontFamily: 'arab')),
                                         ),
                                         SizedBox(width: 20.w)
                                       ],
@@ -181,7 +216,6 @@ class _InvoiceListState extends State<InvoiceList> {
                   ),
                   SizedBox(height: 16.h),
                   Padding(
-
                     padding: EdgeInsets.all(20.w),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -210,15 +244,16 @@ class _InvoiceListState extends State<InvoiceList> {
                                   if (pickedDate != null &&
                                       dateController1.text.isNotEmpty) {
                                     String formattedDate =
-                                    DateFormat("yyyy-MM-dd")
-                                        .format(pickedDate);
+                                        DateFormat("yyyy-MM-dd")
+                                            .format(pickedDate);
 
                                     DateTime sdate =
-                                    DateTime.parse(formattedDate);
-                                    int stimestamp = sdate.millisecondsSinceEpoch;
+                                        DateTime.parse(formattedDate);
+                                    int stimestamp =
+                                        sdate.millisecondsSinceEpoch;
 
                                     DateTime sdate1 =
-                                    DateTime.parse(dateController1.text);
+                                        DateTime.parse(dateController1.text);
                                     DateTime endOfDay = DateTime(
                                         sdate1.year,
                                         sdate1.month,
@@ -237,15 +272,15 @@ class _InvoiceListState extends State<InvoiceList> {
                                       if (dateController1.text.isNotEmpty) {
                                         GainCubit.get(context)
                                             .getInvoicesByTime(
-                                            stimestamp, stimestamp1)
+                                                stimestamp, stimestamp1)
                                             .then((value) => {});
                                       }
                                     });
                                   } else if (pickedDate != null) {
                                     setState(() {
                                       String formattedDate =
-                                      DateFormat("yyyy-MM-dd")
-                                          .format(pickedDate);
+                                          DateFormat("yyyy-MM-dd")
+                                              .format(pickedDate);
                                       dateController.text =
                                           formattedDate.toString();
                                     });
@@ -278,15 +313,16 @@ class _InvoiceListState extends State<InvoiceList> {
                                   if (pickedDate != null &&
                                       dateController.text.isNotEmpty) {
                                     String formattedDate =
-                                    DateFormat("yyyy-MM-dd")
-                                        .format(pickedDate);
+                                        DateFormat("yyyy-MM-dd")
+                                            .format(pickedDate);
 
                                     DateTime sdate =
-                                    DateTime.parse(dateController.text);
-                                    int stimestamp = sdate.millisecondsSinceEpoch;
+                                        DateTime.parse(dateController.text);
+                                    int stimestamp =
+                                        sdate.millisecondsSinceEpoch;
 
                                     DateTime sdate1 =
-                                    DateTime.parse(formattedDate);
+                                        DateTime.parse(formattedDate);
                                     DateTime endOfDay = DateTime(
                                         sdate1.year,
                                         sdate1.month,
@@ -303,14 +339,15 @@ class _InvoiceListState extends State<InvoiceList> {
                                           formattedDate.toString();
 
                                       if (dateController1.text.isNotEmpty) {
-                                        GainCubit.get(context).getInvoicesByTime(
-                                            stimestamp, stimestamp1);
+                                        GainCubit.get(context)
+                                            .getInvoicesByTime(
+                                                stimestamp, stimestamp1);
                                       }
                                     });
                                   } else if (pickedDate != null) {
                                     String formattedDate =
-                                    DateFormat("yyyy-MM-dd")
-                                        .format(pickedDate);
+                                        DateFormat("yyyy-MM-dd")
+                                            .format(pickedDate);
                                     start = DateTime.parse(formattedDate);
 
                                     setState(() {
@@ -338,15 +375,11 @@ class _InvoiceListState extends State<InvoiceList> {
                                 child: Text(
                                   'عرض الكل',
                                   style: TextStyle(
-                                      fontSize: 18.sp,
-                                      fontFamily: 'arab'
-                                  ),
+                                      fontSize: 18.sp, fontFamily: 'arab'),
                                 ),
                               ),
                             ),
-
                           ],
-
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
@@ -360,9 +393,7 @@ class _InvoiceListState extends State<InvoiceList> {
                             Text(
                               "الارباح الكليه",
                               style: TextStyle(
-                                  fontSize: 40.sp,
-                                  fontFamily: 'arab'
-                              ),
+                                  fontSize: 40.sp, fontFamily: 'arab'),
                             ),
                             SizedBox(
                               width: 20.w,
@@ -371,15 +402,14 @@ class _InvoiceListState extends State<InvoiceList> {
                               GainCubit.get(context).totalFilterGain.toString(),
                               style: const TextStyle(
                                   fontFamily: 'arab',
-                                  fontSize: 40, fontWeight: FontWeight.bold),
+                                  fontSize: 40,
+                                  fontWeight: FontWeight.bold),
                             ),
                           ],
                         ),
-
                       ],
                     ),
                   )
-
                 ],
               ),
             );
@@ -394,8 +424,9 @@ class _InvoiceListState extends State<InvoiceList> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('حذف المنتج' , style: TextStyle(fontFamily: 'arab')),
-          content: const Text('هل تريد حذف هذا المنتج؟' , style: TextStyle(fontFamily: 'arab')),
+          title: const Text('حذف المنتج', style: TextStyle(fontFamily: 'arab')),
+          content: const Text('هل تريد حذف هذا المنتج؟',
+              style: TextStyle(fontFamily: 'arab')),
           actions: <Widget>[
             TextButton(
               child: const Text('إلغاء', style: TextStyle(fontFamily: 'arab')),
@@ -405,7 +436,10 @@ class _InvoiceListState extends State<InvoiceList> {
               },
             ),
             TextButton(
-              child: const Text('حذف' , style: TextStyle(fontFamily: 'arab'),),
+              child: const Text(
+                'حذف',
+                style: TextStyle(fontFamily: 'arab'),
+              ),
               onPressed: () {
                 setState(() {
                   SQLHelper.deleteInvoice(invoicetId);
