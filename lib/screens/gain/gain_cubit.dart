@@ -14,87 +14,88 @@ class GainCubit extends Cubit<GainState> {
   GainCubit() : super(GainInitial());
   List<Invoice> invoices = [];
   List<Invoice> filteredInvoices = [];
-  int totalGain = 0;
   int totalFilterGain = 0;
+  int totalGain = 0;
+
   static GainCubit get(context) => BlocProvider.of(context);
 
-Future getInvoices() async {
-  invoices.clear();
-  emit(GainLoading());
-  SQLHelper.getInvoices().then((value) {
-
-    for (Map<String, dynamic> invoice in value) {
-
-      List<dynamic> invoiceList = jsonDecode(invoice['products']);
-      List<Product> products = invoiceList.map((item) => Product.fromJson(item)).toList();
-
-      List<ProductItem> productsItem = [];
-
-      for(Product product in products){
-        productsItem.add(ProductItem(product: product, quantity: product.quantity));
-      }
-
-      invoices.add(Invoice(
-          id: invoice['id'],
-          price: invoice['price'],
-          products: productsItem,
-          timestamp: invoice['time'],
-          gain: invoice['gain'],
-          date: invoice['date'],
-          hour: invoice['hour']
-      )
-      );
-    }
-    totalFilterGain = totalGain;
-    filteredInvoices = List.from(invoices);
-
-    emit(GainSuccessful());
-  });
-
-}
-
-Future getInvoicesByTime(int startTimestamp , int endTimestamp) async{
-  filteredInvoices.clear();
-  emit(GainLoading());
-
-  SQLHelper.getInvoicesByTime(startTimestamp, endTimestamp).then((value) {
-
+  Future getInvoices() async {
+    invoices.clear();
+    filteredInvoices.clear();
+    emit(GainLoading());
+    SQLHelper.getInvoices().then((value) {
+      totalFilterGain = 0;
       for (Map<String, dynamic> invoice in value) {
-
+        int zippy = 0;
         List<dynamic> invoiceList = jsonDecode(invoice['products']);
-        List<Product> products = invoiceList.map((item) => Product.fromJson(item)).toList();
+        List<Product> products =
+            invoiceList.map((item) => Product.fromJson(item)).toList();
 
         List<ProductItem> productsItem = [];
 
-        for(Product product in products){
-          productsItem.add(ProductItem(product: product, quantity: product.quantity));
+        for (Product product in products) {
+          productsItem
+              .add(ProductItem(product: product, quantity: product.quantity));
+        }
+
+        invoices.add(Invoice(
+            id: invoice['id'],
+            price: double.parse(invoice['price'].toString()),
+            products: productsItem,
+            timestamp: invoice['timestamp'],
+            gain: double.parse(invoice['gain'].toString()),
+            date: invoice['date'],
+            hour: invoice['hour']));
+
+        totalFilterGain +=
+            (products[zippy].sellPrice - products[zippy].buyPrice) *
+                products[zippy].quantity;
+        totalGain = totalFilterGain;
+        print(invoice.toString() + 'aaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+        zippy++;
+      }
+      filteredInvoices = List.from(invoices);
+
+      emit(GainSuccessful());
+    });
+  }
+
+  Future getInvoicesByTime(int startTimestamp, int endTimestamp) async {
+    filteredInvoices.clear();
+    emit(Gain2Loading());
+
+    SQLHelper.getInvoicesByTime(startTimestamp, endTimestamp).then((value) {
+      for (Map<String, dynamic> invoice in value) {
+        List<dynamic> invoiceList = jsonDecode(invoice['products']);
+        List<Product> products =
+            invoiceList.map((item) => Product.fromJson(item)).toList();
+
+        List<ProductItem> productsItem = [];
+
+        for (Product product in products) {
+          productsItem
+              .add(ProductItem(product: product, quantity: product.quantity));
         }
 
         filteredInvoices.add(Invoice(
             id: invoice['id'],
-            price: invoice['price'],
+            price: double.parse(invoice['price'].toString()),
             products: productsItem,
-            timestamp: invoice['time'],
-            gain: invoice['gain'],
+            timestamp: invoice['timestamp'],
+            gain: double.parse(invoice['gain'].toString()),
             date: invoice['date'],
-            hour: invoice['hour']
-        )
-
-        );
+            hour: invoice['hour']));
       }
 
-      emit(GainSuccessful());
+      emit(Gain2Successful());
     });
-
   }
 
-Future resetInvoices() async{
+  Future resetInvoices() async {
     emit(GainLoading());
-    filteredInvoices = List.from(invoices);;
+    filteredInvoices = List.from(invoices);
     print("${invoices.length}  oooooooo");
     totalFilterGain = totalGain;
     emit(GainReset());
-
   }
-
 }

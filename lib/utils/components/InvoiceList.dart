@@ -27,7 +27,7 @@ class _InvoiceListState extends State<InvoiceList> {
     'رقم الفاتوره',
     'التاريخ',
     'الساعه',
-    'صافي الربح'
+    'إجمالي الفاتورة'
   ];
   late TextEditingController dateController;
   late TextEditingController dateController1;
@@ -50,16 +50,14 @@ class _InvoiceListState extends State<InvoiceList> {
         child: BlocConsumer<GainCubit, GainState>(
           listener: (context, state) {
             if (state is GainSuccessful) {
-              GainCubit.get(context).totalFilterGain = 0;
               GainCubit.get(context).filteredInvoices.forEach((element) {
-                GainCubit.get(context).totalFilterGain =
-                    (GainCubit.get(context).totalFilterGain + element.gain!) as int;
+
                 print(element.gain);
               });
             } else if (state is GainReset) {
               GainCubit.get(context).filteredInvoices.forEach((element) {
                 GainCubit.get(context).totalFilterGain =
-                    (GainCubit.get(context).totalFilterGain + element.gain!) as int;
+                    (GainCubit.get(context).totalFilterGain + element.gain!).toInt();
               });
             }
           },
@@ -69,198 +67,7 @@ class _InvoiceListState extends State<InvoiceList> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  // Display the common factors
-
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Column(
-                        children: [
-                          SizedBox(
-                            height: 10.h,
-                          ),
-                          Container(
-                            width: 500,
-                            child: TextField(
-                              controller: dateController,
-                              decoration: const InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  icon: Icon(Icons.calendar_today),
-                                  labelText: "من"),
-                              readOnly: true,
-                              onTap: () async {
-                                DateTime? pickedDate = await showDatePicker(
-                                  context: context,
-                                  initialDate: DateTime.now(),
-                                  firstDate: DateTime(2000),
-                                  lastDate: DateTime(2025),
-                                );
-                                if (pickedDate != null &&
-                                    dateController1.text.isNotEmpty) {
-                                  String formattedDate =
-                                      DateFormat("yyyy-MM-dd")
-                                          .format(pickedDate);
-
-                                  DateTime sdate =
-                                      DateTime.parse(formattedDate);
-                                  int stimestamp = sdate.millisecondsSinceEpoch;
-
-                                  DateTime sdate1 =
-                                      DateTime.parse(dateController1.text);
-                                  DateTime endOfDay = DateTime(
-                                      sdate1.year,
-                                      sdate1.month,
-                                      sdate1.day,
-                                      23,
-                                      59,
-                                      59,
-                                      999);
-                                  int stimestamp1 =
-                                      endOfDay.millisecondsSinceEpoch;
-
-                                  setState(() {
-                                    dateController.text =
-                                        formattedDate.toString();
-
-                                    if (dateController1.text.isNotEmpty) {
-                                      GainCubit.get(context)
-                                          .getInvoicesByTime(
-                                              stimestamp, stimestamp1)
-                                          .then((value) => {});
-                                    }
-                                  });
-                                } else if (pickedDate != null) {
-                                  setState(() {
-                                    String formattedDate =
-                                        DateFormat("yyyy-MM-dd")
-                                            .format(pickedDate);
-                                    dateController.text =
-                                        formattedDate.toString();
-                                  });
-                                } else {
-                                  print("Not selected");
-                                }
-                              },
-                            ),
-                          ),
-                          SizedBox(
-                            height: 20.h,
-                          ),
-                          Container(
-                            width: 500,
-                            child: TextField(
-                              controller: dateController1,
-                              decoration: const InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  icon: Icon(Icons.calendar_today),
-                                  labelText: "الي"),
-                              readOnly: true,
-                              onTap: () async {
-                                DateTime? pickedDate = await showDatePicker(
-                                  context: context,
-                                  initialDate: DateTime.now(),
-                                  firstDate: DateTime(2000),
-                                  lastDate: DateTime(2025),
-                                );
-
-                                if (pickedDate != null &&
-                                    dateController.text.isNotEmpty) {
-                                  String formattedDate =
-                                      DateFormat("yyyy-MM-dd")
-                                          .format(pickedDate);
-
-                                  DateTime sdate =
-                                      DateTime.parse(dateController.text);
-                                  int stimestamp = sdate.millisecondsSinceEpoch;
-
-                                  DateTime sdate1 =
-                                      DateTime.parse(formattedDate);
-                                  DateTime endOfDay = DateTime(
-                                      sdate1.year,
-                                      sdate1.month,
-                                      sdate1.day,
-                                      23,
-                                      59,
-                                      59,
-                                      999);
-                                  int stimestamp1 =
-                                      endOfDay.millisecondsSinceEpoch;
-
-                                  setState(() {
-                                    dateController1.text =
-                                        formattedDate.toString();
-
-                                    if (dateController1.text.isNotEmpty) {
-                                      GainCubit.get(context).getInvoicesByTime(
-                                          stimestamp, stimestamp1);
-                                    }
-                                  });
-                                } else if (pickedDate != null) {
-                                  String formattedDate =
-                                      DateFormat("yyyy-MM-dd")
-                                          .format(pickedDate);
-                                  start = DateTime.parse(formattedDate);
-
-                                  setState(() {
-                                    dateController1.text =
-                                        formattedDate.toString();
-                                  });
-                                } else {
-                                  print("Not selected");
-                                }
-                              },
-                            ),
-                          ),
-                          SizedBox(
-                            height: 20.h,
-                          ),
-                          SizedBox(
-                            width: 100.w,
-                            height: 40.h,
-                            child: ElevatedButton(
-                              onPressed: () {
-                                dateController.text = "";
-                                dateController1.text = "";
-                                GainCubit.get(context).resetInvoices();
-                              },
-                              child: Text(
-                                'الكل',
-                                style: TextStyle(
-                                  fontSize: 18.sp,
-                                  fontFamily: 'arab'
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        width: 50.w,
-                      ),
-                      SizedBox(
-                        width: 50.w,
-                      ),
-                      Text(
-                        "الارباح الكليه",
-                        style: TextStyle(
-                          fontSize: 40.sp,
-                          fontFamily: 'arab'
-                        ),
-                      ),
-                      SizedBox(
-                        width: 20.w,
-                      ),
-                      Text(
-                        GainCubit.get(context).totalFilterGain.toString(),
-                        style: const TextStyle(
-                            fontFamily: 'arab',
-                            fontSize: 40, fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
-
                   SizedBox(height: 40.h),
-
                   Row(
                     children: [
                       for (String factor in commonFactors)
@@ -373,6 +180,206 @@ class _InvoiceListState extends State<InvoiceList> {
                     ),
                   ),
                   SizedBox(height: 16.h),
+                  Padding(
+
+                    padding: EdgeInsets.all(20.w),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Column(
+                          children: [
+                            SizedBox(
+                              height: 10.h,
+                            ),
+                            Container(
+                              width: 500,
+                              child: TextField(
+                                controller: dateController,
+                                decoration: const InputDecoration(
+                                    border: OutlineInputBorder(),
+                                    icon: Icon(Icons.calendar_today),
+                                    labelText: "من"),
+                                readOnly: true,
+                                onTap: () async {
+                                  DateTime? pickedDate = await showDatePicker(
+                                    context: context,
+                                    initialDate: DateTime.now(),
+                                    firstDate: DateTime(2000),
+                                    lastDate: DateTime(2025),
+                                  );
+                                  if (pickedDate != null &&
+                                      dateController1.text.isNotEmpty) {
+                                    String formattedDate =
+                                    DateFormat("yyyy-MM-dd")
+                                        .format(pickedDate);
+
+                                    DateTime sdate =
+                                    DateTime.parse(formattedDate);
+                                    int stimestamp = sdate.millisecondsSinceEpoch;
+
+                                    DateTime sdate1 =
+                                    DateTime.parse(dateController1.text);
+                                    DateTime endOfDay = DateTime(
+                                        sdate1.year,
+                                        sdate1.month,
+                                        sdate1.day,
+                                        23,
+                                        59,
+                                        59,
+                                        999);
+                                    int stimestamp1 =
+                                        endOfDay.millisecondsSinceEpoch;
+
+                                    setState(() {
+                                      dateController.text =
+                                          formattedDate.toString();
+
+                                      if (dateController1.text.isNotEmpty) {
+                                        GainCubit.get(context)
+                                            .getInvoicesByTime(
+                                            stimestamp, stimestamp1)
+                                            .then((value) => {});
+                                      }
+                                    });
+                                  } else if (pickedDate != null) {
+                                    setState(() {
+                                      String formattedDate =
+                                      DateFormat("yyyy-MM-dd")
+                                          .format(pickedDate);
+                                      dateController.text =
+                                          formattedDate.toString();
+                                    });
+                                  } else {
+                                    print("Not selected");
+                                  }
+                                },
+                              ),
+                            ),
+                            SizedBox(
+                              height: 20.h,
+                            ),
+                            Container(
+                              width: 500,
+                              child: TextField(
+                                controller: dateController1,
+                                decoration: const InputDecoration(
+                                    border: OutlineInputBorder(),
+                                    icon: Icon(Icons.calendar_today),
+                                    labelText: "الي"),
+                                readOnly: true,
+                                onTap: () async {
+                                  DateTime? pickedDate = await showDatePicker(
+                                    context: context,
+                                    initialDate: DateTime.now(),
+                                    firstDate: DateTime(2000),
+                                    lastDate: DateTime(2025),
+                                  );
+
+                                  if (pickedDate != null &&
+                                      dateController.text.isNotEmpty) {
+                                    String formattedDate =
+                                    DateFormat("yyyy-MM-dd")
+                                        .format(pickedDate);
+
+                                    DateTime sdate =
+                                    DateTime.parse(dateController.text);
+                                    int stimestamp = sdate.millisecondsSinceEpoch;
+
+                                    DateTime sdate1 =
+                                    DateTime.parse(formattedDate);
+                                    DateTime endOfDay = DateTime(
+                                        sdate1.year,
+                                        sdate1.month,
+                                        sdate1.day,
+                                        23,
+                                        59,
+                                        59,
+                                        999);
+                                    int stimestamp1 =
+                                        endOfDay.millisecondsSinceEpoch;
+
+                                    setState(() {
+                                      dateController1.text =
+                                          formattedDate.toString();
+
+                                      if (dateController1.text.isNotEmpty) {
+                                        GainCubit.get(context).getInvoicesByTime(
+                                            stimestamp, stimestamp1);
+                                      }
+                                    });
+                                  } else if (pickedDate != null) {
+                                    String formattedDate =
+                                    DateFormat("yyyy-MM-dd")
+                                        .format(pickedDate);
+                                    start = DateTime.parse(formattedDate);
+
+                                    setState(() {
+                                      dateController1.text =
+                                          formattedDate.toString();
+                                    });
+                                  } else {
+                                    print("Not selected");
+                                  }
+                                },
+                              ),
+                            ),
+                            SizedBox(
+                              height: 20.h,
+                            ),
+                            SizedBox(
+                              width: 150.w,
+                              height: 40.h,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  dateController.text = "";
+                                  dateController1.text = "";
+                                  GainCubit.get(context).resetInvoices();
+                                },
+                                child: Text(
+                                  'عرض الكل',
+                                  style: TextStyle(
+                                      fontSize: 18.sp,
+                                      fontFamily: 'arab'
+                                  ),
+                                ),
+                              ),
+                            ),
+
+                          ],
+
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              width: 50.w,
+                            ),
+                            SizedBox(
+                              width: 50.w,
+                            ),
+                            Text(
+                              "الارباح الكليه",
+                              style: TextStyle(
+                                  fontSize: 40.sp,
+                                  fontFamily: 'arab'
+                              ),
+                            ),
+                            SizedBox(
+                              width: 20.w,
+                            ),
+                            Text(
+                              GainCubit.get(context).totalFilterGain.toString(),
+                              style: const TextStyle(
+                                  fontFamily: 'arab',
+                                  fontSize: 40, fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+
+                      ],
+                    ),
+                  )
+
                 ],
               ),
             );

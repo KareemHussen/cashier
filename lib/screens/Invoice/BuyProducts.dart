@@ -1,4 +1,3 @@
-import 'dart:collection';
 
 import 'package:cashier/data/model/Invoice.dart';
 import 'package:cashier/data/model/Product.dart';
@@ -32,6 +31,8 @@ class _ProductSelectionScreenState extends State<ProductSelectionScreen> {
           totalSell+= (sell -(product.product.sellPrice * product.quantity) );
         }
       } else {
+        var sell = product.product.sellPrice * product.quantity;
+        total -= sell;
         _selectedProducts.remove(product);
       }
     });
@@ -40,6 +41,13 @@ class _ProductSelectionScreenState extends State<ProductSelectionScreen> {
   void _onProductQuantityChanged(ProductItem product, int quantity) {
     setState(() {
       product.quantity = quantity;
+      if(product.selected){
+        total =0;
+        for(ProductItem item in _selectedProducts){
+          total += item.product.sellPrice * item.quantity;
+        }
+      }
+
     });
   }
 
@@ -137,6 +145,7 @@ class _ProductSelectionScreenState extends State<ProductSelectionScreen> {
                                       hour: DateTime.now().hour.toString(),
                                       date: DateTime.now().toString()),
                                   context);
+                              Navigator.pop(context);
                             },
                             child: const Text(
                               'حفظ وطباعة',

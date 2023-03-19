@@ -130,9 +130,9 @@ class SQLHelper {
     var hour = d12.substring(12 , 23);
 
     final data = {
-      'price': price as int,
+      'price': price.toInt(),
       'products': json,
-      'time': currentTime,
+      'timestamp': currentTime,
       'gain' : gain,
       'date' : date,
       'hour' : hour
@@ -145,7 +145,7 @@ class SQLHelper {
 
   static Future<List<Map<String, dynamic>>> getInvoices() async {
     final db = await SQLHelper.initDb();
-    return db.query('invoices', orderBy: "time DESC");
+    return db.query('invoices', orderBy: "timestamp DESC");
   }
 
   //get invoice by id
@@ -157,7 +157,7 @@ class SQLHelper {
   static Future<List<Map<String, dynamic>>> getInvoicesByTime(int startTimestamp, int endTimestamp) async {
     final db = await SQLHelper.initDb();
     List<Map<String, dynamic>> list = await db.rawQuery(
-      'SELECT * FROM invoices WHERE time BETWEEN ? AND ? ORDER BY time DESC',
+      'SELECT * FROM invoices WHERE timestamp BETWEEN ? AND ? ORDER BY timestamp DESC',
       [startTimestamp, endTimestamp],
     );    return list;
   }
@@ -165,7 +165,7 @@ class SQLHelper {
   //get invoice by time
   static Future<List<Map<String, dynamic>>> getInvoiceByTime(DateTime id) async {
     final db = await SQLHelper.initDb();
-    return db.query('invoices', where: "time >= ?", whereArgs: [id.millisecond]);
+    return db.query('invoices', where: "timestamp >= ?", whereArgs: [id.millisecond]);
   }
 
   //update

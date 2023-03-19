@@ -1,6 +1,7 @@
 import 'package:cashier/data/local/database.dart';
 import 'package:cashier/data/model/Invoice.dart';
 import 'package:cashier/data/model/product_item.dart';
+import 'package:cashier/screens/gain/gain_cubit.dart';
 import 'package:cashier/screens/storage/storage_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -128,9 +129,9 @@ class PrintPdf {
   static Future<void> checkOut(Invoice v, BuildContext context) async {
     double gain = 0.0;
     List<Product> list = [];
+    int zippy2 = 0;
     for (ProductItem product in v.products) {
       gain += product.product.sellPrice - product.product.buyPrice;
-      //TODO
       list.add(product.product);
       await SQLHelper.updateProduct(
           product.product.id!,
@@ -138,12 +139,16 @@ class PrintPdf {
           (product.product.quantity - product.quantity),
           product.product.buyPrice,
           product.product.sellPrice);
+      list[zippy2].quantity = product.quantity;
+      zippy2++;
     }
 
     //TODO
-    // await SQLHelper.addInvoice(v.price!, list, gain);
-
-    StorageCubit.get(context).getProducts();
+    await SQLHelper.addInvoice(v.price!, list, gain);
+    await ()async{
+      GainCubit.get(context).getInvoices();
+      StorageCubit.get(context).getProducts();
+    };
     var doc =
         await printInvoice(v.products, v.timestamp.toString(), v.price ?? -1);
     await Printing.layoutPdf(
