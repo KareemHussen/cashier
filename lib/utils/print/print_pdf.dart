@@ -48,7 +48,6 @@ class PrintPdf {
   static pw.Column printerList(List<ProductItem> productItems, pw.Font ttf) {
     List<Product> products = [];
     productItems.forEach((value) {
-
       //TODO
       products.add(value.product);
     });
@@ -130,24 +129,28 @@ class PrintPdf {
     double gain = 0.0;
     List<Product> list = [];
     int index = 0;
-    for (ProductItem product in v.products) {
-      gain += product.product.sellPrice - product.product.buyPrice;
-      list.add(product.product);
-      await SQLHelper.updateProduct(
-          product.product.id!,
-          product.product.name,
-          (product.product.quantity - product.quantity),
-          product.product.buyPrice,
-          product.product.sellPrice).then((value) => {
-            list[index].quantity = product.quantity,
-            index++
-         }
-      );
+    v.products = v.products.where((element) => element.quantity > 0).toList();
+    if (v.products.isNotEmpty) {
+      for (ProductItem product in v.products) {
+        gain += product.product.sellPrice - product.product.buyPrice;
+        list.add(product.product);
+        await SQLHelper.updateProduct(
+                product.product.id!,
+                product.product.name,
+                (product.product.quantity - product.quantity),
+                product.product.buyPrice,
+                product.product.sellPrice)
+            .then((value) => () {
+                  list[index].quantity = product.quantity;
+                  index++;
+                });
+      }
+    } else {
+      return;
     }
 
-    //TODO
     await SQLHelper.addInvoice(v.price!, list, gain);
-    await ()async{
+    await () async {
       GainCubit.get(context).getInvoices();
       StorageCubit.get(context).getProducts();
     };
