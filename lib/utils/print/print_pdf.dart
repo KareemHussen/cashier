@@ -129,24 +129,19 @@ class PrintPdf {
     double gain = 0.0;
     List<Product> list = [];
     int index = 0;
-    v.products = v.products.where((element) => element.quantity > 0).toList();
-    if (v.products.isNotEmpty) {
-      for (ProductItem product in v.products) {
-        gain += product.product.sellPrice - product.product.buyPrice;
-        list.add(product.product);
-        await SQLHelper.updateProduct(
-                product.product.id!,
-                product.product.name,
-                (product.product.quantity - product.quantity),
-                product.product.buyPrice,
-                product.product.sellPrice)
-            .then((value) => () {
-                  list[index].quantity = product.quantity;
-                  index++;
-                });
-      }
-    } else {
-      return;
+    for (ProductItem product in v.products) {
+      gain += product.product.sellPrice - product.product.buyPrice;
+      list.add(product.product);
+      await SQLHelper.updateProduct(
+              product.product.id!,
+              product.product.name,
+              (product.product.quantity - product.quantity),
+              product.product.buyPrice,
+              product.product.sellPrice)
+          .then((value) => () {
+                list[index].quantity = product.quantity;
+                index++;
+              });
     }
 
     await SQLHelper.addInvoice(v.price!, list, gain);

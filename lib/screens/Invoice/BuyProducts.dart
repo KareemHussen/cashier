@@ -1,4 +1,3 @@
-
 import 'package:cashier/data/model/Invoice.dart';
 import 'package:cashier/data/model/Product.dart';
 import 'package:cashier/data/model/product_item.dart';
@@ -30,7 +29,7 @@ class _ProductSelectionScreenState extends State<ProductSelectionScreen> {
           _selectedProducts.add(product);
           var sell = product.product.sellPrice * product.quantity;
           total += sell;
-          totalSell+= (sell -(product.product.sellPrice * product.quantity) );
+          totalSell += (sell - (product.product.sellPrice * product.quantity));
         }
       } else {
         var sell = product.product.sellPrice * product.quantity;
@@ -43,17 +42,38 @@ class _ProductSelectionScreenState extends State<ProductSelectionScreen> {
   void _onProductQuantityChanged(ProductItem product, int quantity) {
     setState(() {
       product.quantity = quantity;
-      if(product.selected){
-        total =0;
-        for(ProductItem item in _selectedProducts){
-          if(item.quantity != 0) {
+      if (product.selected) {
+        total = 0;
+        for (ProductItem item in _selectedProducts) {
+          if (item.quantity != 0) {
             total += item.product.sellPrice * item.quantity;
           }
         }
       }
-
     });
   }
+
+  void alertInvalid(BuildContext context, String title, String subtitle) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(subtitle),
+          actions: [
+            TextButton(
+              child: const Text('حسنا'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+    // _controller.clear();
+  }
+
 
   @override
   void initState() {
@@ -88,7 +108,6 @@ class _ProductSelectionScreenState extends State<ProductSelectionScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 16.w),
                     child: TextField(
@@ -101,18 +120,17 @@ class _ProductSelectionScreenState extends State<ProductSelectionScreen> {
                           searchQuery = value;
                           productItemList = filteredItemList
                               .where((product) =>
-                          product.product.name
-                              .toLowerCase()
-                              .contains(searchQuery.toLowerCase()) ||
-                              product.product.id
-                                  .toString()
-                                  .contains(searchQuery.toLowerCase()))
+                                  product.product.name
+                                      .toLowerCase()
+                                      .contains(searchQuery.toLowerCase()) ||
+                                  product.product.id
+                                      .toString()
+                                      .contains(searchQuery.toLowerCase()))
                               .toList();
                         });
                       },
                     ),
                   ),
-
                   SizedBox(height: 20.h),
                   const Text('-     العناصر المتاحة',
                       style:
@@ -121,7 +139,7 @@ class _ProductSelectionScreenState extends State<ProductSelectionScreen> {
                     child: ListView.builder(
                       itemCount: productItemList.length,
                       itemBuilder: (context, index) {
-                          return ProductListItem(
+                        return ProductListItem(
                           productItem: productItemList[index],
                           onSelect: (selected) {
                             _onProductSelect(productItemList[index], selected);
@@ -130,7 +148,6 @@ class _ProductSelectionScreenState extends State<ProductSelectionScreen> {
                               _onProductQuantityChanged(
                                   productItemList[index], quantity),
                         );
-
                       },
                     ),
                   ),
@@ -156,8 +173,8 @@ class _ProductSelectionScreenState extends State<ProductSelectionScreen> {
                         final product = _selectedProducts[index];
                         return ListTile(
                           title: Text(product.product.name),
-                          subtitle: Text('سعر البيع: ${(product.product.sellPrice * product.quantity)
-                                  .toStringAsFixed(2)}ج.م \n الكمية: ${product.quantity}'),
+                          subtitle: Text(
+                              'سعر البيع: ${(product.product.sellPrice * product.quantity).toStringAsFixed(2)}ج.م \n الكمية: ${product.quantity}'),
                         );
                       },
                     ),
@@ -169,23 +186,35 @@ class _ProductSelectionScreenState extends State<ProductSelectionScreen> {
                       children: [
                         ElevatedButton(
                             onPressed: () {
-                              PrintPdf.checkOut(
+                              var filtered = productItemList
+                                  .where((element) => element.quantity > 0)
+                                  .toList();
+                              if(filtered.isNotEmpty) {
+                                PrintPdf.checkOut(
                                   Invoice(
-                                      products: productItemList, price: total,
-                                      gain: totalSell, timestamp: DateTime.now().millisecond,
+                                      products: filtered,
+                                      price: total,
+                                      gain: totalSell,
+                                      timestamp: DateTime.now().millisecond,
                                       hour: DateTime.now().hour.toString(),
                                       date: DateTime.now().toString()),
                                   context);
-                              Navigator.pop(context);
+                                Navigator.pop(context);
+                              }
+                              else{
+                                alertInvalid(context , "الكمية فارغة", "أدخل كمية صحيحة لا تساوي 0");
+                              }
                             },
                             child: const Text(
                               'حفظ وطباعة',
                               style: TextStyle(fontFamily: 'arab'),
                             )),
-                         Text(
+                        Text(
                           'إجمالي الفاتورة: $total.LE',
                           style: TextStyle(
-                              fontFamily: 'arab', fontWeight: FontWeight.bold, fontSize: 24.sp),
+                              fontFamily: 'arab',
+                              fontWeight: FontWeight.bold,
+                              fontSize: 24.sp),
                         ),
                       ],
                     ),
