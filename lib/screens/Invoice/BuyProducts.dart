@@ -18,8 +18,10 @@ class _ProductSelectionScreenState extends State<ProductSelectionScreen> {
   final List<ProductItem> _selectedProducts = [];
   List<Product> _products = [];
   List<ProductItem> productItemList = [];
+  List<ProductItem> filteredItemList = [];
   double total = 0.0;
   double totalSell = 0.0;
+  String searchQuery = '';
 
   void _onProductSelect(ProductItem product, bool selected) {
     setState(() {
@@ -44,7 +46,9 @@ class _ProductSelectionScreenState extends State<ProductSelectionScreen> {
       if(product.selected){
         total =0;
         for(ProductItem item in _selectedProducts){
-          total += item.product.sellPrice * item.quantity;
+          if(item.quantity != 0) {
+            total += item.product.sellPrice * item.quantity;
+          }
         }
       }
 
@@ -61,6 +65,7 @@ class _ProductSelectionScreenState extends State<ProductSelectionScreen> {
       productItemList
           .add(ProductItem(product: item, quantity: 0, selected: false));
     }
+    filteredItemList = productItemList.toList();
   }
 
   @override
@@ -83,6 +88,31 @@ class _ProductSelectionScreenState extends State<ProductSelectionScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16.w),
+                    child: TextField(
+                      style: const TextStyle(fontFamily: 'arab'),
+                      decoration: const InputDecoration(
+                        hintText: 'البحث عن منتج',
+                      ),
+                      onChanged: (value) {
+                        setState(() {
+                          searchQuery = value;
+                          productItemList = filteredItemList
+                              .where((product) =>
+                          product.product.name
+                              .toLowerCase()
+                              .contains(searchQuery.toLowerCase()) ||
+                              product.product.id
+                                  .toString()
+                                  .contains(searchQuery.toLowerCase()))
+                              .toList();
+                        });
+                      },
+                    ),
+                  ),
+
                   SizedBox(height: 20.h),
                   const Text('-     العناصر المتاحة',
                       style:
@@ -91,7 +121,7 @@ class _ProductSelectionScreenState extends State<ProductSelectionScreen> {
                     child: ListView.builder(
                       itemCount: productItemList.length,
                       itemBuilder: (context, index) {
-                        return ProductListItem(
+                          return ProductListItem(
                           productItem: productItemList[index],
                           onSelect: (selected) {
                             _onProductSelect(productItemList[index], selected);
@@ -100,6 +130,7 @@ class _ProductSelectionScreenState extends State<ProductSelectionScreen> {
                               _onProductQuantityChanged(
                                   productItemList[index], quantity),
                         );
+
                       },
                     ),
                   ),
