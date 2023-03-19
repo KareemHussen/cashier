@@ -129,7 +129,7 @@ class PrintPdf {
   static Future<void> checkOut(Invoice v, BuildContext context) async {
     double gain = 0.0;
     List<Product> list = [];
-    int zippy2 = 0;
+    int index = 0;
     for (ProductItem product in v.products) {
       gain += product.product.sellPrice - product.product.buyPrice;
       list.add(product.product);
@@ -138,9 +138,11 @@ class PrintPdf {
           product.product.name,
           (product.product.quantity - product.quantity),
           product.product.buyPrice,
-          product.product.sellPrice);
-      list[zippy2].quantity = product.quantity;
-      zippy2++;
+          product.product.sellPrice).then((value) => {
+            list[index].quantity = product.quantity,
+            index++
+         }
+      );
     }
 
     //TODO
