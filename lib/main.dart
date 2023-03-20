@@ -6,12 +6,28 @@ import 'package:cashier/utils/bloc_observer/bloc_observer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:window_manager/window_manager.dart';
 
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await SQLHelper.initDb();
   Bloc.observer = MyBlocObserver();
+  /*
+  *   full screen code
+  WidgetsFlutterBinding.ensureInitialized();
+  await windowManager.ensureInitialized();
+
+  windowManager.waitUntilReadyToShow().then((_) async{
+    // await windowManager.setSize(const Size(1920, 1080));
+    // await windowManager.center();
+
+    await windowManager.setTitleBarStyle(TitleBarStyle.normal );
+    await windowManager.setFullScreen(true);
+    await windowManager.show();
+  });
+  * */
 
   runApp(MultiBlocProvider(
       providers: [
@@ -20,6 +36,7 @@ Future<void> main() async {
 
       ],
       child: MaterialApp(
+
           debugShowCheckedModeBanner: false,
           home: ScreenUtilInit(
             designSize: const Size(1920, 1080),
@@ -40,6 +57,7 @@ Future<void> main() async {
             },
             child: const MyApp(),
           ))));
+
 }
 
 class MyApp extends StatelessWidget {

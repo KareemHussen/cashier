@@ -49,17 +49,7 @@ class _InvoiceListState extends State<InvoiceList> {
         },
         child: BlocConsumer<GainCubit, GainState>(
           listener: (context, state) {
-            if (state is GainSuccessful) {
-              GainCubit.get(context).filteredInvoices.forEach((element) {
-                print(element.gain);
-              });
-            } else if (state is GainReset) {
-              GainCubit.get(context).filteredInvoices.forEach((element) {
-                GainCubit.get(context).totalFilterGain =
-                    (GainCubit.get(context).totalFilterGain + element.gain!)
-                        .toInt();
-              });
-            }
+
           },
           builder: (context, state) {
             return Container(
@@ -284,8 +274,6 @@ class _InvoiceListState extends State<InvoiceList> {
                                       dateController.text =
                                           formattedDate.toString();
                                     });
-                                  } else {
-                                    print("Not selected");
                                   }
                                 },
                               ),
@@ -354,8 +342,6 @@ class _InvoiceListState extends State<InvoiceList> {
                                       dateController1.text =
                                           formattedDate.toString();
                                     });
-                                  } else {
-                                    print("Not selected");
                                   }
                                 },
                               ),

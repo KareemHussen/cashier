@@ -210,7 +210,7 @@ class _ProductSelectionScreenState extends State<ProductSelectionScreen> {
                               style: TextStyle(fontFamily: 'arab'),
                             )),
                         Text(
-                          'إجمالي الفاتورة: $total.LE',
+                          'إجمالي الفاتورة: $total ج.م.',
                           style: TextStyle(
                               fontFamily: 'arab',
                               fontWeight: FontWeight.bold,

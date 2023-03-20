@@ -26,16 +26,20 @@ class GainCubit extends Cubit<GainState> {
     SQLHelper.getInvoices().then((value) {
       totalFilterGain = 0;
       for (Map<String, dynamic> invoice in value) {
-        int zippy = 0;
+        int counter = 0;
         List<dynamic> invoiceList = jsonDecode(invoice['products']);
         List<Product> products =
             invoiceList.map((item) => Product.fromJson(item)).toList();
-
         List<ProductItem> productsItem = [];
 
         for (Product product in products) {
           productsItem
               .add(ProductItem(product: product, quantity: product.quantity));
+
+          totalFilterGain +=
+              (products[counter].sellPrice - products[counter].buyPrice) *
+                  products[counter].quantity;
+          counter++;
         }
 
         invoices.add(Invoice(
@@ -47,12 +51,8 @@ class GainCubit extends Cubit<GainState> {
             date: invoice['date'],
             hour: invoice['hour']));
 
-        totalFilterGain +=
-            (products[zippy].sellPrice - products[zippy].buyPrice) *
-                products[zippy].quantity;
+
         totalGain = totalFilterGain;
-        print(invoice.toString() + 'aaaaaaaaaaaaaaaaaaaaaaaaaaaa');
-        zippy++;
       }
       filteredInvoices = List.from(invoices);
 
@@ -65,7 +65,10 @@ class GainCubit extends Cubit<GainState> {
     emit(Gain2Loading());
 
     SQLHelper.getInvoicesByTime(startTimestamp, endTimestamp).then((value) {
+      totalFilterGain = 0;
+
       for (Map<String, dynamic> invoice in value) {
+        int indicator = 0;
         List<dynamic> invoiceList = jsonDecode(invoice['products']);
         List<Product> products =
             invoiceList.map((item) => Product.fromJson(item)).toList();
@@ -75,6 +78,10 @@ class GainCubit extends Cubit<GainState> {
         for (Product product in products) {
           productsItem
               .add(ProductItem(product: product, quantity: product.quantity));
+          totalFilterGain +=
+              (products[indicator].sellPrice - products[indicator].buyPrice) *
+                  products[indicator].quantity;
+          indicator++;
         }
 
         filteredInvoices.add(Invoice(
@@ -85,6 +92,7 @@ class GainCubit extends Cubit<GainState> {
             gain: double.parse(invoice['gain'].toString()),
             date: invoice['date'],
             hour: invoice['hour']));
+
       }
 
       emit(Gain2Successful());
@@ -94,7 +102,6 @@ class GainCubit extends Cubit<GainState> {
   Future resetInvoices() async {
     emit(GainLoading());
     filteredInvoices = List.from(invoices);
-    print("${invoices.length}  oooooooo");
     totalFilterGain = totalGain;
     emit(GainReset());
   }

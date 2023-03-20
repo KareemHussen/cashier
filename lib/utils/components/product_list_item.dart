@@ -37,7 +37,7 @@ class _ProductListItemState extends State<ProductListItem> {
                     Text(widget.productItem.product.name,
                         style: TextStyle(fontSize: 28.0.sp)),
                     Text(
-                        ' \$${widget.productItem.product.sellPrice.toStringAsFixed(2)}',
+                        ' ${widget.productItem.product.sellPrice.toStringAsFixed(2)} ج.م.',
                         style: const TextStyle(
                             color: Colors.black, fontFamily: 'arab')),
                   ],

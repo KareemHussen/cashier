@@ -145,10 +145,8 @@ class PrintPdf {
     }
 
     await SQLHelper.addInvoice(v.price!, list, gain);
-    await () async {
-      GainCubit.get(context).getInvoices();
-      StorageCubit.get(context).getProducts();
-    };
+    GainCubit.get(context).getInvoices();
+    StorageCubit.get(context).getProducts();
     var doc =
         await printInvoice(v.products, v.timestamp.toString(), v.price ?? -1);
     await Printing.layoutPdf(
