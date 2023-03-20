@@ -1,5 +1,6 @@
 import 'package:cashier/data/local/database.dart';
 import 'package:cashier/data/model/Invoice.dart';
+import 'package:cashier/data/model/product_item.dart';
 import 'package:cashier/screens/gain/gain_cubit.dart';
 import 'package:cashier/utils/components/product_list.dart';
 import 'package:flutter/material.dart';
