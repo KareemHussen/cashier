@@ -433,7 +433,7 @@ class _InvoiceListState extends State<InvoiceList> {
                       .filteredInvoices.where((element) => element.id == invoicetId).first;
                   for(ProductItem p in inv.products) {
                     GainCubit.get(context)
-                      .totalFilterGain -= p.product.sellPrice -p.product.buyPrice;
+                      .totalFilterGain -= (p.product.sellPrice -p.product.buyPrice) * p.quantity;
                   }
                   SQLHelper.deleteInvoice(invoicetId);
                   GainCubit.get(context)
