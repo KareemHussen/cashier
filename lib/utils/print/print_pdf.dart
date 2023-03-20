@@ -137,13 +137,9 @@ class PrintPdf {
               product.product.name,
               (product.product.quantity - product.quantity),
               product.product.buyPrice,
-              product.product.sellPrice)
-          .then((value) => () {
-                list[index].quantity = product.quantity;
-                index++;
-              });
+              product.product.sellPrice);
     }
-
+    list = v.products.map((e){e.product.quantity = e.quantity; return e.product;}).toList();
     await SQLHelper.addInvoice(v.price!, list, gain);
     GainCubit.get(context).getInvoices();
     StorageCubit.get(context).getProducts();

@@ -449,10 +449,10 @@ packages:
     dependency: transitive
     description:
       name: sqlite3
-      sha256: "0a9f8fe561aad15b94549c98d55dee6825a401efec83bf92956e337e35e68ae5"
+      sha256: cab735283879114cef78ee69071d652a7303d8376727c688ad56a2013997a8d0
       url: "https://pub.dev"
     source: hosted
-    version: "1.9.3"
+    version: "1.10.0"
   stack_trace:
     dependency: transitive
     description:

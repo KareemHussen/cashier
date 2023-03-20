@@ -99,7 +99,7 @@ class Invoice {
 
   static List<Product> generateList(List<ProductItem> m){
     List<Product> products = [];
-    m.forEach((key) {products.add(key.product);});
+    for (var key in m) {products.add(key.product);}
     return products;
   }
 
