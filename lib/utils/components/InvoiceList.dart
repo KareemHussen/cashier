@@ -439,6 +439,9 @@ class _InvoiceListState extends State<InvoiceList> {
                   GainCubit.get(context)
                       .filteredInvoices
                       .removeWhere((product) => product.id == invoicetId);
+                  GainCubit.get(context)
+                      .invoices
+                      .removeWhere((product) => product.id == invoicetId);
                 });
                 Navigator.of(context).pop();
               },

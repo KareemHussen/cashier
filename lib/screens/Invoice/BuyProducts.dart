@@ -185,12 +185,12 @@ class _ProductSelectionScreenState extends State<ProductSelectionScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         ElevatedButton(
-                            onPressed: () {
+                            onPressed: () async{
                               var filtered = productItemList
                                   .where((element) => element.quantity > 0)
                                   .toList();
                               if(filtered.isNotEmpty) {
-                                PrintPdf.checkOut(
+                                await PrintPdf.checkOut(
                                   Invoice(
                                       products: filtered,
                                       price: total,

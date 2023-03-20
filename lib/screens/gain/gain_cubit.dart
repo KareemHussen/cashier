@@ -20,9 +20,9 @@ class GainCubit extends Cubit<GainState> {
   static GainCubit get(context) => BlocProvider.of(context);
 
   Future getInvoices() async {
+    emit(GainLoading());
     invoices.clear();
     filteredInvoices.clear();
-    emit(GainLoading());
     SQLHelper.getInvoices().then((value) {
       totalFilterGain = 0;
       for (Map<String, dynamic> invoice in value) {
@@ -101,6 +101,7 @@ class GainCubit extends Cubit<GainState> {
 
   Future resetInvoices() async {
     emit(GainLoading());
+    filteredInvoices.clear();
     filteredInvoices = List.from(invoices);
     totalFilterGain = totalGain;
     emit(GainReset());

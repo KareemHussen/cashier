@@ -142,8 +142,9 @@ class PrintPdf {
     await SQLHelper.addInvoice(v.price!, list, gain);
     GainCubit.get(context).getInvoices();
     StorageCubit.get(context).getProducts();
+
     var doc =
-        await printInvoice(v.products, v.date, v.price ?? -1);
+        await printInvoice(v.products, v.date.toString().substring(0,19) , v.price ?? -1);
     await Printing.layoutPdf(
         onLayout: (PdfPageFormat format) async => doc.save());
     // save to db
