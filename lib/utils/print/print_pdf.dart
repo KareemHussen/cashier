@@ -128,7 +128,6 @@ class PrintPdf {
   static Future<void> checkOut(Invoice v, BuildContext context) async {
     double gain = 0.0;
     List<Product> list = [];
-    int index = 0;
     for (ProductItem product in v.products) {
       gain += product.product.sellPrice - product.product.buyPrice;
       list.add(product.product);
@@ -144,7 +143,7 @@ class PrintPdf {
     GainCubit.get(context).getInvoices();
     StorageCubit.get(context).getProducts();
     var doc =
-        await printInvoice(v.products, v.timestamp.toString(), v.price ?? -1);
+        await printInvoice(v.products, v.date, v.price ?? -1);
     await Printing.layoutPdf(
         onLayout: (PdfPageFormat format) async => doc.save());
     // save to db

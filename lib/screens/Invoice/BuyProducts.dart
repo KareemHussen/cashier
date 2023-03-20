@@ -195,7 +195,7 @@ class _ProductSelectionScreenState extends State<ProductSelectionScreen> {
                                       products: filtered,
                                       price: total,
                                       gain: totalSell,
-                                      timestamp: DateTime.now().millisecond,
+                                      timestamp: DateTime.now().millisecondsSinceEpoch,
                                       hour: DateTime.now().hour.toString(),
                                       date: DateTime.now().toString()),
                                   context);
