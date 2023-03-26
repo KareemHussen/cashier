@@ -122,10 +122,10 @@ class _ProductSelectionScreenState extends State<ProductSelectionScreen> {
                               .where((product) =>
                                   product.product.name
                                       .toLowerCase()
-                                      .contains(searchQuery.toLowerCase()) ||
+                                      .startsWith(searchQuery.toLowerCase()) ||
                                   product.product.id
                                       .toString()
-                                      .contains(searchQuery.toLowerCase()))
+                                      .startsWith(searchQuery.toLowerCase()))
                               .toList();
                         });
                       },
@@ -199,6 +199,12 @@ class _ProductSelectionScreenState extends State<ProductSelectionScreen> {
                                       hour: DateTime.now().hour.toString(),
                                       date: DateTime.now().toString()),
                                   context);
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Center(child: Text('تم إصدار الفاتورة بنجاح')),
+                                    duration: Duration(seconds: 2),
+                                  ),
+                                );
                                 Navigator.pop(context);
                               }
                               else{

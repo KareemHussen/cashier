@@ -76,7 +76,7 @@ class SQLHelper {
   //read all products
   static Future<List<Map<String, dynamic>>> getproducts() async {
     final db = await SQLHelper.initDb();
-    return db.query('products', orderBy: "id");
+    return db.query('products', orderBy: "name");
   }
 
   //get plant by id
@@ -124,7 +124,7 @@ class SQLHelper {
 
     var dt = DateTime.fromMillisecondsSinceEpoch(currentTime);
 
-    var d12 = DateFormat('MM/dd/yyyy, hh:mm:ss a').format(dt);
+    var d12 = DateFormat('dd/MM/yyyy, hh:mm:ss a').format(dt);
 
     var date = d12.substring(0 , 10);
     var hour = d12.substring(12 , 23);

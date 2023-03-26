@@ -69,10 +69,10 @@ class _ProductListState extends State<ProductList> {
                           .where((product) =>
                               product.name
                                   .toLowerCase()
-                                  .contains(searchQuery.toLowerCase()) ||
+                                  .startsWith(searchQuery.toLowerCase()) ||
                               product.id
                                   .toString()
-                                  .contains(searchQuery.toLowerCase()))
+                                  .startsWith(searchQuery.toLowerCase()))
                           .toList();
                     });
                   },

@@ -11,7 +11,7 @@ class Shorfalls extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    products = StorageCubit.get(context).products.where((product) => product.quantity < 15).toList();
+    products = StorageCubit.get(context).products.where((product) => product.quantity < 10).toList();
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
