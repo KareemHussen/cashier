@@ -80,6 +80,7 @@ class _ProductListState extends State<ProductList> {
               ),
             if (products.isNotEmpty)
               Row(
+
                 children: [
                   for (String factor in commonFactors)
                     (factor == 'name')
