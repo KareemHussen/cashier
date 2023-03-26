@@ -18,39 +18,54 @@ class PrintPdf {
       children: [
         pw.SizedBox(height: 13.h),
         pw.Row(
-          mainAxisAlignment: pw.MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: pw.MainAxisAlignment.center,
           mainAxisSize: pw.MainAxisSize.max,
           children: [
-            pw.Text('${p.sellPrice * quantity}',
-                style: pw.TextStyle(font: ttf, fontSize: 16),
-                textDirection: pw.TextDirection.rtl),
-            pw.Text('${p.sellPrice}',
-                style: pw.TextStyle(font: ttf, fontSize: 16),
-                textDirection: pw.TextDirection.rtl),
-            pw.Text('$quantity',
-                style: pw.TextStyle(font: ttf, fontSize: 16),
-                textDirection: pw.TextDirection.rtl),
-            pw.Text(p.name,
-                style: pw.TextStyle(font: ttf, fontSize: 16),
-                textDirection: pw.TextDirection.rtl),
-            pw.Text('(${index + 1})',
-                style: pw.TextStyle(font: ttf, fontSize: 16),
-                textDirection: pw.TextDirection.rtl),
+            pw.Expanded(
+              child: pw.Center(
+                  child: pw.Text('${p.sellPrice * quantity}',
+                      style: pw.TextStyle(font: ttf, fontSize: 16),
+                      textDirection: pw.TextDirection.rtl)),
+            ),
+            pw.Expanded(
+              child: pw.Center(
+                child: pw.Text('${p.sellPrice}',
+                    style: pw.TextStyle(font: ttf, fontSize: 16),
+                    textDirection: pw.TextDirection.rtl),
+              ),
+            ),
+            pw.Expanded(
+              child: pw.Center(
+                child: pw.Text('$quantity',
+                    style: pw.TextStyle(font: ttf, fontSize: 16),
+                    textDirection: pw.TextDirection.rtl),
+              ),
+            ),
+            pw.Expanded(
+              child: pw.Center(
+                child: pw.Text(p.name,
+                    style: pw.TextStyle(font: ttf, fontSize: 16),
+                    textDirection: pw.TextDirection.rtl),
+              ),
+            ),
+            pw.Expanded(
+              child: pw.Center(
+                child: pw.Text('(${index + 1})',
+                    style: pw.TextStyle(font: ttf, fontSize: 16),
+                    textDirection: pw.TextDirection.rtl),
+              ),
+            ),
           ],
         ),
-        pw.Center(
-            child: pw.Text(
-                '--------------------------------------------------------------------'))
       ],
     );
   }
 
   static pw.Column printerList(List<ProductItem> productItems, pw.Font ttf) {
     List<Product> products = [];
-    productItems.forEach((value) {
-      //TODO
+    for (var value in productItems) {
       products.add(value.product);
-    });
+    }
     return pw.Column(
       children: [
         pw.SizedBox(height: 13.h),
@@ -58,21 +73,41 @@ class PrintPdf {
           mainAxisAlignment: pw.MainAxisAlignment.spaceEvenly,
           mainAxisSize: pw.MainAxisSize.max,
           children: [
-            pw.Text(' سعر الكمية ',
-                style: pw.TextStyle(font: ttf, fontSize: 16),
-                textDirection: pw.TextDirection.rtl),
-            pw.Text(' سعر المنتج ',
-                style: pw.TextStyle(font: ttf, fontSize: 16),
-                textDirection: pw.TextDirection.rtl),
-            pw.Text(' الكمية ',
-                style: pw.TextStyle(font: ttf, fontSize: 16),
-                textDirection: pw.TextDirection.rtl),
-            pw.Text(' اسم المنتج ',
-                style: pw.TextStyle(font: ttf, fontSize: 16),
-                textDirection: pw.TextDirection.rtl),
-            pw.Text(' الترتيب ',
-                style: pw.TextStyle(font: ttf, fontSize: 16),
-                textDirection: pw.TextDirection.rtl),
+            pw.Expanded(
+              child: pw.Center(
+                child: pw.Text(' سعر الكمية ',
+                    style: pw.TextStyle(font: ttf, fontSize: 16),
+                    textDirection: pw.TextDirection.rtl),
+              ),
+            ),
+            pw.Expanded(
+              child: pw.Center(
+                child: pw.Text(' سعر المنتج ',
+                    style: pw.TextStyle(font: ttf, fontSize: 16),
+                    textDirection: pw.TextDirection.rtl),
+              ),
+            ),
+            pw.Expanded(
+              child: pw.Center(
+                child: pw.Text(' الكمية ',
+                    style: pw.TextStyle(font: ttf, fontSize: 16),
+                    textDirection: pw.TextDirection.rtl),
+              ),
+            ),
+            pw.Expanded(
+              child: pw.Center(
+                child: pw.Text(' اسم المنتج ',
+                    style: pw.TextStyle(font: ttf, fontSize: 16),
+                    textDirection: pw.TextDirection.rtl),
+              ),
+            ),
+            pw.Expanded(
+              child: pw.Center(
+                child: pw.Text(' الترتيب ',
+                    style: pw.TextStyle(font: ttf, fontSize: 16),
+                    textDirection: pw.TextDirection.rtl),
+              ),
+            ),
           ],
         ),
         pw.Column(
@@ -132,19 +167,22 @@ class PrintPdf {
       gain += product.product.sellPrice - product.product.buyPrice;
       list.add(product.product);
       await SQLHelper.updateProduct(
-              product.product.id!,
-              product.product.name,
-              (product.product.quantity - product.quantity),
-              product.product.buyPrice,
-              product.product.sellPrice);
+          product.product.id!,
+          product.product.name,
+          (product.product.quantity - product.quantity),
+          product.product.buyPrice,
+          product.product.sellPrice);
     }
-    list = v.products.map((e){e.product.quantity = e.quantity; return e.product;}).toList();
+    list = v.products.map((e) {
+      e.product.quantity = e.quantity;
+      return e.product;
+    }).toList();
     await SQLHelper.addInvoice(v.price!, list, gain);
     GainCubit.get(context).getInvoices();
     StorageCubit.get(context).getProducts();
 
-    var doc =
-        await printInvoice(v.products, v.date.toString().substring(0,19) , v.price ?? -1);
+    var doc = await printInvoice(
+        v.products, v.date.toString().substring(0, 19), v.price ?? -1);
     await Printing.layoutPdf(
         onLayout: (PdfPageFormat format) async => doc.save());
     // save to db
