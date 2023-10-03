@@ -1,5 +1,4 @@
-## DONEEEEEEEEEEEEEEEEEEEEEEEEEE ##
-# cashier
+# Cashier
 
 A new Flutter project.
 
